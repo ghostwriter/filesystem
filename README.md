@@ -1,13 +1,13 @@
-# Wip
+# Filesystem
 
-[![Compliance](https://github.com/ghostwriter/wip/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/wip/actions/workflows/compliance.yml)
-[![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/wip?color=8892bf)](https://www.php.net/supported-versions)
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/wip&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
-[![Code Coverage](https://codecov.io/gh/ghostwriter/wip/branch/main/graph/badge.svg)](https://codecov.io/gh/ghostwriter/wip)
-[![Type Coverage](https://shepherd.dev/github/ghostwriter/wip/coverage.svg)](https://shepherd.dev/github/ghostwriter/wip)
-[![Psalm Level](https://shepherd.dev/github/ghostwriter/wip/level.svg)](https://psalm.dev/docs/running_psalm/error_levels)
-[![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/wip)](https://packagist.org/packages/ghostwriter/wip)
-[![Downloads](https://badgen.net/packagist/dt/ghostwriter/wip?color=blue)](https://packagist.org/packages/ghostwriter/wip)
+[![Compliance](https://github.com/ghostwriter/filesystem/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/filesystem/actions/workflows/compliance.yml)
+[![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/filesystem?color=8892bf)](https://www.php.net/supported-versions)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/filesystem&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
+[![Code Coverage](https://codecov.io/gh/ghostwriter/filesystem/branch/main/graph/badge.svg)](https://codecov.io/gh/ghostwriter/filesystem)
+[![Type Coverage](https://shepherd.dev/github/ghostwriter/filesystem/coverage.svg)](https://shepherd.dev/github/ghostwriter/filesystem)
+[![Psalm Level](https://shepherd.dev/github/ghostwriter/filesystem/level.svg)](https://psalm.dev/docs/running_psalm/error_levels)
+[![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/filesystem)](https://packagist.org/packages/ghostwriter/filesystem)
+[![Downloads](https://badgen.net/packagist/dt/ghostwriter/filesystem?color=blue)](https://packagist.org/packages/ghostwriter/filesystem)
 
 work in progress
 
@@ -20,7 +20,7 @@ work in progress
 You can install the package via composer:
 
 ``` bash
-composer require ghostwriter/wip
+composer require ghostwriter/filesystem
 ```
 
 ### Star ⭐️ this repo if you find it useful
@@ -36,7 +36,7 @@ You can also star (🌟) this repo to find it easier later.
 ### Credits
 
 - [Nathanael Esayeas](https://github.com/ghostwriter)
-- [All Contributors](https://github.com/ghostwriter/wip/contributors)
+- [All Contributors](https://github.com/ghostwriter/filesystem/contributors)
 
 ### Changelog
 
