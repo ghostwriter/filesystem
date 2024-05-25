@@ -43,7 +43,7 @@ interface PathInterface extends IteratorAggregate
 
     public function parent(): self;
 
-    public function realPath(): string;
+    public function realpath(): string;
 
     public function size(): int;
 
