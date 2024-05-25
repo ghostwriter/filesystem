@@ -136,7 +136,7 @@ trait PathTrait
     }
 
     #[Override]
-    public function realPath(): string
+    public function realpath(): string
     {
         return $this->splFileInfo->getRealPath();
     }
