@@ -9,7 +9,7 @@
 [![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/filesystem)](https://packagist.org/packages/ghostwriter/filesystem)
 [![Downloads](https://badgen.net/packagist/dt/ghostwriter/filesystem?color=blue)](https://packagist.org/packages/ghostwriter/filesystem)
 
-work in progress
+Filesystem implementation for PHP
 
 > [!WARNING]
 >
@@ -30,7 +30,17 @@ You can also star (🌟) this repo to find it easier later.
 ## Usage
 
 ```php
-// work in progress
+use GhostWriter\Filesystem\Filesystem;
+
+$filesystem = new Filesystem();
+
+$currentDirectory = $filesystem->currentWorkingDirectory();
+
+$filesystem->write($currentDirectory . '/blm.txt', '#BlackLivesMatter');
+
+$content = $filesystem->read($currentDirectory . '/blm.txt');
+
+echo $content; // #BlackLivesMatter
 ```
 
 ### Credits
