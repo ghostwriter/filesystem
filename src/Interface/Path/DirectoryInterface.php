@@ -6,7 +6,6 @@ namespace Ghostwriter\Filesystem\Interface\Path;
 
 use Generator;
 use Ghostwriter\Filesystem\Interface\PathInterface;
-use IteratorAggregate;
 
 interface DirectoryInterface extends PathInterface
 {
