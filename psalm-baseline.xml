@@ -1,2 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.23.1@8471a896ccea3526b26d082f4461eeea467f10a4"/>
+<files psalm-version="5.24.0@462c80e31c34e58cc4f750c656be3927e80e550e">
+  <file src="src/Filesystem.php">
+    <LessSpecificReturnStatement>
+      <code><![CDATA[$temporaryFile]]></code>
+    </LessSpecificReturnStatement>
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new DirectoryAlreadyExistsException($path);]]></code>
+      <code><![CDATA[throw new FailedToCopyFileException($source);]]></code>
+      <code><![CDATA[throw new FailedToCreateDirectoryException($path);]]></code>
+      <code><![CDATA[throw new FailedToCreateFileException($path);]]></code>
+      <code><![CDATA[throw new FailedToCreateTemporaryFileException();]]></code>
+      <code><![CDATA[throw new FailedToDeleteDirectoryException($path);]]></code>
+      <code><![CDATA[throw new FailedToDeleteFileException($path);]]></code>
+      <code><![CDATA[throw new FailedToDeleteLinkException($path);]]></code>
+      <code><![CDATA[throw new FailedToDetermineCurrentWorkingDirectoryException();]]></code>
+      <code><![CDATA[throw new FailedToFileGetContentsException($path);]]></code>
+      <code><![CDATA[throw new FileAlreadyExistsException($path);]]></code>
+      <code><![CDATA[throw new FileDoesNotExistException($path);]]></code>
+      <code><![CDATA[throw new FileIsNotReadableException($path);]]></code>
+      <code><![CDATA[write]]></code>
+    </MissingThrowsDocblock>
+    <MoreSpecificReturnType>
+      <code><![CDATA[non-empty-string]]></code>
+    </MoreSpecificReturnType>
+    <PossiblyUndefinedArrayOffset>
+      <code><![CDATA[$relPath[0]]]></code>
+    </PossiblyUndefinedArrayOffset>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Interface/FilesystemInterface.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[append]]></code>
+      <code><![CDATA[basename]]></code>
+      <code><![CDATA[copy]]></code>
+      <code><![CDATA[createFile]]></code>
+      <code><![CDATA[createTemporaryDirectory]]></code>
+      <code><![CDATA[createTemporaryFile]]></code>
+      <code><![CDATA[currentWorkingDirectory]]></code>
+      <code><![CDATA[exists]]></code>
+      <code><![CDATA[extension]]></code>
+      <code><![CDATA[filename]]></code>
+      <code><![CDATA[isExecutable]]></code>
+      <code><![CDATA[lastAccessTime]]></code>
+      <code><![CDATA[lastChangeTime]]></code>
+      <code><![CDATA[lastModifiedTime]]></code>
+      <code><![CDATA[link]]></code>
+      <code><![CDATA[linkInfo]]></code>
+      <code><![CDATA[linkTarget]]></code>
+      <code><![CDATA[listDirectory]]></code>
+      <code><![CDATA[move]]></code>
+      <code><![CDATA[parentDirectory]]></code>
+      <code><![CDATA[pathname]]></code>
+      <code><![CDATA[prepend]]></code>
+      <code><![CDATA[realpath]]></code>
+      <code><![CDATA[recursiveIterator]]></code>
+      <code><![CDATA[relative]]></code>
+      <code><![CDATA[size]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Interface/PathInterface.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[basename]]></code>
+      <code><![CDATA[exists]]></code>
+      <code><![CDATA[extension]]></code>
+      <code><![CDATA[filename]]></code>
+      <code><![CDATA[isExecutable]]></code>
+      <code><![CDATA[isFile]]></code>
+      <code><![CDATA[isLink]]></code>
+      <code><![CDATA[isReadable]]></code>
+      <code><![CDATA[isWritable]]></code>
+      <code><![CDATA[lastAccessTime]]></code>
+      <code><![CDATA[lastChangeTime]]></code>
+      <code><![CDATA[lastModifiedTime]]></code>
+      <code><![CDATA[linkTarget]]></code>
+      <code><![CDATA[parent]]></code>
+      <code><![CDATA[realpath]]></code>
+      <code><![CDATA[size]]></code>
+      <code><![CDATA[toString]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Trait/PathTrait.php">
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new InvalidDirectoryPathException($path);]]></code>
+    </MissingThrowsDocblock>
+  </file>
+</files>
