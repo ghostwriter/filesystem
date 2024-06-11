@@ -37,6 +37,10 @@ interface FilesystemInterface
 
     public function exists(string $path): bool;
 
+    public function extension(string $path): string;
+
+    public function filename(string $path): string;
+
     /**
      * @return Generator<SplFileInfo>
      */
@@ -54,12 +58,22 @@ interface FilesystemInterface
 
     public function isWritable(string $path): bool;
 
+    public function lastAccessTime(string $path): int;
+
+    public function lastChangeTime(string $path): int;
+
+    public function lastModifiedTime(string $path): int;
+
     public function link(string $target, string $link): void;
 
     /**
      * @return array<array-key, int>
      */
     public function linkInfo(string $path): array;
+
+    public function linkTarget(string $path): string;
+
+    public function listDirectory(string $path): Generator;
 
     public function missing(string $path): bool;
 
@@ -69,6 +83,8 @@ interface FilesystemInterface
      * @param int<1,max> $levels
      */
     public function parentDirectory(string $path, int $levels = 1): string;
+
+    public function pathname(string $path): string;
 
     public function prepend(string $path, string $contents): int;
 
@@ -86,20 +102,4 @@ interface FilesystemInterface
     public function size(string $path): int;
 
     public function write(string $path, string $contents): int;
-
-    public function listDirectory(string $path): Generator;
-
-    public function lastAccessTime(string $path): int;
-
-    public function lastChangeTime(string $path): int;
-
-    public function lastModifiedTime(string $path): int;
-
-    public function extension(string $path): string;
-
-    public function filename(string $path): string;
-
-    public function pathname(string $path): string;
-
-    public function linkTarget(string $path): string;
 }
