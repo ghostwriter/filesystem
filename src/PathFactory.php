@@ -13,8 +13,8 @@ use Ghostwriter\Filesystem\Interface\PathInterface;
 use Ghostwriter\Filesystem\Path\Directory;
 use Ghostwriter\Filesystem\Path\File;
 use Ghostwriter\Filesystem\Path\Link;
-use SplFileInfo;
 use Override;
+use SplFileInfo;
 
 final readonly class PathFactory implements PathFactoryInterface
 {
@@ -35,12 +35,6 @@ final readonly class PathFactory implements PathFactoryInterface
     }
 
     #[Override]
-    public function createLink(SplFileInfo $fileInfo): LinkInterface
-    {
-        return new Link($fileInfo);
-    }
-
-    #[Override]
     public function createDirectory(SplFileInfo $fileInfo): DirectoryInterface
     {
         return new Directory($fileInfo);
@@ -50,5 +44,11 @@ final readonly class PathFactory implements PathFactoryInterface
     public function createFile(SplFileInfo $fileInfo): FileInterface
     {
         return new File($fileInfo);
+    }
+
+    #[Override]
+    public function createLink(SplFileInfo $fileInfo): LinkInterface
+    {
+        return new Link($fileInfo);
     }
 }
