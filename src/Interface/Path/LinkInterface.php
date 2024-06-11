@@ -6,4 +6,6 @@ namespace Ghostwriter\Filesystem\Interface\Path;
 
 use Ghostwriter\Filesystem\Interface\PathInterface;
 
-interface LinkInterface extends PathInterface {}
+interface LinkInterface extends PathInterface
+{
+}
