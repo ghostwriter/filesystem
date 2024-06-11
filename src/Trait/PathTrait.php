@@ -6,9 +6,9 @@ namespace Ghostwriter\Filesystem\Trait;
 
 use FilesystemIterator;
 use Generator;
+use Ghostwriter\Filesystem\Exception\InvalidDirectoryPathException;
 use Ghostwriter\Filesystem\Interface\PathInterface;
 use Ghostwriter\Filesystem\Path\Directory;
-use Ghostwriter\Filesystem\Exception\InvalidDirectoryPathException;
 use Ghostwriter\Filesystem\Path\File;
 use Ghostwriter\Filesystem\Path\Link;
 use Override;
@@ -22,7 +22,14 @@ trait PathTrait
 {
     public function __construct(
         private readonly SplFileInfo $splFileInfo
-    ) {}
+    ) {
+    }
+
+    #[Override]
+    public function basename(string $suffix = ''): string
+    {
+        return $this->splFileInfo->getBasename($suffix);
+    }
 
     #[Override]
     public function exists(): bool
@@ -31,27 +38,15 @@ trait PathTrait
     }
 
     #[Override]
-    public function isFile(): bool
+    public function extension(): string
     {
-        return $this->splFileInfo->isFile();
+        return $this->splFileInfo->getExtension();
     }
 
     #[Override]
-    public function isDirectory(): bool
+    public function filename(): string
     {
-        return $this->splFileInfo->isDir();
-    }
-
-    #[Override]
-    public function isLink(): bool
-    {
-        return $this->splFileInfo->isLink();
-    }
-
-    #[Override]
-    public function toString(): string
-    {
-        return $this->splFileInfo->getRealPath() ?: $this->splFileInfo->getPathname();
+        return $this->splFileInfo->getFilename();
     }
 
     #[Override]
@@ -88,6 +83,42 @@ trait PathTrait
     }
 
     #[Override]
+    public function isDirectory(): bool
+    {
+        return $this->splFileInfo->isDir();
+    }
+
+    #[Override]
+    public function isExecutable(): bool
+    {
+        return $this->splFileInfo->isExecutable();
+    }
+
+    #[Override]
+    public function isFile(): bool
+    {
+        return $this->splFileInfo->isFile();
+    }
+
+    #[Override]
+    public function isLink(): bool
+    {
+        return $this->splFileInfo->isLink();
+    }
+
+    #[Override]
+    public function isReadable(): bool
+    {
+        return $this->splFileInfo->isReadable();
+    }
+
+    #[Override]
+    public function isWritable(): bool
+    {
+        return $this->splFileInfo->isWritable();
+    }
+
+    #[Override]
     public function lastAccessTime(): int
     {
         return $this->splFileInfo->getATime();
@@ -103,24 +134,6 @@ trait PathTrait
     public function lastModifiedTime(): int
     {
         return $this->splFileInfo->getMTime();
-    }
-
-    #[Override]
-    public function basename(string $suffix = ''): string
-    {
-        return $this->splFileInfo->getBasename($suffix);
-    }
-
-    #[Override]
-    public function extension(): string
-    {
-        return $this->splFileInfo->getExtension();
-    }
-
-    #[Override]
-    public function filename(): string
-    {
-        return $this->splFileInfo->getFilename();
     }
 
     #[Override]
@@ -148,20 +161,8 @@ trait PathTrait
     }
 
     #[Override]
-    public function isExecutable(): bool
+    public function toString(): string
     {
-        return $this->splFileInfo->isExecutable();
-    }
-
-    #[Override]
-    public function isReadable(): bool
-    {
-        return $this->splFileInfo->isReadable();
-    }
-
-    #[Override]
-    public function isWritable(): bool
-    {
-        return $this->splFileInfo->isWritable();
+        return $this->splFileInfo->getRealPath() ?: $this->splFileInfo->getPathname();
     }
 }
