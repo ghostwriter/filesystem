@@ -7,4 +7,6 @@ namespace Ghostwriter\Filesystem\Exception;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use RuntimeException;
 
-final class FailedToAppendFileException extends RuntimeException implements FilesystemExceptionInterface {}
+final class FailedToAppendFileException extends RuntimeException implements FilesystemExceptionInterface
+{
+}
