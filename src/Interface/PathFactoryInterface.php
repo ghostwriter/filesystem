@@ -13,9 +13,9 @@ interface PathFactoryInterface
 {
     public function create(string $path): PathInterface;
 
-    public function createLink(SplFileInfo $fileInfo): LinkInterface;
-
     public function createDirectory(SplFileInfo $fileInfo): DirectoryInterface;
 
     public function createFile(SplFileInfo $fileInfo): FileInterface;
+
+    public function createLink(SplFileInfo $fileInfo): LinkInterface;
 }
