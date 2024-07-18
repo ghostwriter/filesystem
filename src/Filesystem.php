@@ -36,6 +36,11 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
+use const DIRECTORY_SEPARATOR;
+use const FILE_APPEND;
+use const PATHINFO_EXTENSION;
+use const PATHINFO_FILENAME;
+
 use function array_pad;
 use function array_shift;
 use function basename;
@@ -73,16 +78,35 @@ use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
 
-use const DIRECTORY_SEPARATOR;
-use const FILE_APPEND;
-use const PATHINFO_EXTENSION;
-use const PATHINFO_FILENAME;
-
 final readonly class Filesystem implements FilesystemInterface
 {
     public function __construct(
         private readonly PathFactory $pathFactory
-    ) {}
+    ) {
+    }
+
+    /**
+     * @throws FilesystemExceptionInterface
+     */
+    #[Override]
+    public function append(string $path, string $contents): int
+    {
+        if (! $this->isFile($path)) {
+            throw new FileDoesNotExistException($path);
+        }
+
+        if (! $this->isWritable($path)) {
+            throw new FileIsNotWritableException($path);
+        }
+
+        $bytes = file_put_contents($path, $contents, FILE_APPEND);
+
+        if ($bytes === false) {
+            throw new FailedToAppendFileException($path);
+        }
+
+        return $bytes;
+    }
 
     #[Override]
     public function basename(string $path, string $suffix = ''): string
@@ -233,6 +257,18 @@ final readonly class Filesystem implements FilesystemInterface
         return file_exists($path);
     }
 
+    #[Override]
+    public function extension(string $path): string
+    {
+        return pathinfo($path, PATHINFO_EXTENSION);
+    }
+
+    #[Override]
+    public function filename(string $path): string
+    {
+        return pathinfo($path, PATHINFO_FILENAME);
+    }
+
     /**
      * @return Generator<SplFileInfo>
      */
@@ -278,6 +314,24 @@ final readonly class Filesystem implements FilesystemInterface
         return is_writable($path);
     }
 
+    #[Override]
+    public function lastAccessTime(string $path): int
+    {
+        return fileatime($path);
+    }
+
+    #[Override]
+    public function lastChangeTime(string $path): int
+    {
+        return filectime($path);
+    }
+
+    #[Override]
+    public function lastModifiedTime(string $path): int
+    {
+        return filemtime($path);
+    }
+
     /**
      * @throws FilesystemExceptionInterface
      */
@@ -304,6 +358,45 @@ final readonly class Filesystem implements FilesystemInterface
         }
 
         return $info;
+    }
+
+    /**
+     * @throws FilesystemExceptionInterface
+     */
+    #[Override]
+    public function linkTarget(string $path): string
+    {
+        $target = readlink($path);
+
+        if ($target === false) {
+            throw new FailedToReadLinkException($path);
+        }
+
+        return $target;
+    }
+
+    //    #[Override]
+    //    public function fileObject(string $path): FileInterface
+    //    {
+    //        return new File($path, $this);
+    //    }
+    //
+    //    #[Override]
+    //    public function directoryObject(string $path): DirectoryInterface
+    //    {
+    //        return new Directory($path, $this);
+    //    }
+    //
+    //    #[Override]
+    //    public function linkObject(string $path): LinkInterface
+    //    {
+    //        return new Link($path, $this);
+    //    }
+
+    #[Override]
+    public function listDirectory(string $path): Generator
+    {
+        return $this->findIn($path);
     }
 
     #[Override]
@@ -333,55 +426,15 @@ final readonly class Filesystem implements FilesystemInterface
     }
 
     #[Override]
+    public function pathname(string $path): string
+    {
+        return $path;
+    }
+
+    #[Override]
     public function prepend(string $path, string $contents): int
     {
         return $this->write($path, $contents . $this->read($path));
-    }
-
-    /**
-     * @throws FilesystemExceptionInterface
-     */
-    #[Override]
-    public function append(string $path, string $contents): int
-    {
-        if (! $this->isFile($path)) {
-            throw new FileDoesNotExistException($path);
-        }
-
-        if (! $this->isWritable($path)) {
-            throw new FileIsNotWritableException($path);
-        }
-
-        $bytes = file_put_contents($path, $contents, FILE_APPEND);
-
-        if ($bytes === false) {
-            throw new FailedToAppendFileException($path);
-        }
-
-        return $bytes;
-    }
-
-    /**
-     * @throws FilesystemExceptionInterface
-     */
-    #[Override]
-    public function write(string $path, string $contents): int
-    {
-        if (! $this->isFile($path)) {
-            throw new FileDoesNotExistException($path);
-        }
-
-        if (! $this->isWritable($path)) {
-            throw new FileIsNotWritableException($path);
-        }
-
-        $bytes = file_put_contents($path, $contents);
-
-        if ($bytes === false) {
-            throw new FailedToFilePutContentsException($path);
-        }
-
-        return $bytes;
     }
 
     #[Override]
@@ -401,21 +454,6 @@ final readonly class Filesystem implements FilesystemInterface
         }
 
         return $contents;
-    }
-
-    /**
-     * @throws FilesystemExceptionInterface
-     */
-    #[Override]
-    public function linkTarget(string $path): string
-    {
-        $target = readlink($path);
-
-        if ($target === false) {
-            throw new FailedToReadLinkException($path);
-        }
-
-        return $target;
     }
 
     /**
@@ -474,6 +512,7 @@ final readonly class Filesystem implements FilesystemInterface
                 array_shift($relPath);
                 continue;
             }
+
             // get number of remaining dirs to $from
             $remaining = count($from) - $depth;
 
@@ -486,6 +525,7 @@ final readonly class Filesystem implements FilesystemInterface
 
             $relPath[0] = './' . $relPath[0];
         }
+
         return implode('/', $relPath);
     }
 
@@ -504,63 +544,26 @@ final readonly class Filesystem implements FilesystemInterface
         return $size;
     }
 
-    //    #[Override]
-    //    public function fileObject(string $path): FileInterface
-    //    {
-    //        return new File($path, $this);
-    //    }
-    //
-    //    #[Override]
-    //    public function directoryObject(string $path): DirectoryInterface
-    //    {
-    //        return new Directory($path, $this);
-    //    }
-    //
-    //    #[Override]
-    //    public function linkObject(string $path): LinkInterface
-    //    {
-    //        return new Link($path, $this);
-    //    }
-
+    /**
+     * @throws FilesystemExceptionInterface
+     */
     #[Override]
-    public function listDirectory(string $path): Generator
+    public function write(string $path, string $contents): int
     {
-        return $this->findIn($path);
-    }
+        if (! $this->isFile($path)) {
+            throw new FileDoesNotExistException($path);
+        }
 
-    #[Override]
-    public function lastAccessTime(string $path): int
-    {
-        return fileatime($path);
-    }
+        if (! $this->isWritable($path)) {
+            throw new FileIsNotWritableException($path);
+        }
 
-    #[Override]
-    public function lastChangeTime(string $path): int
-    {
-        return filectime($path);
-    }
+        $bytes = file_put_contents($path, $contents);
 
-    #[Override]
-    public function lastModifiedTime(string $path): int
-    {
-        return filemtime($path);
-    }
+        if ($bytes === false) {
+            throw new FailedToFilePutContentsException($path);
+        }
 
-    #[Override]
-    public function extension(string $path): string
-    {
-        return pathinfo($path, PATHINFO_EXTENSION);
-    }
-
-    #[Override]
-    public function filename(string $path): string
-    {
-        return pathinfo($path, PATHINFO_FILENAME);
-    }
-
-    #[Override]
-    public function pathname(string $path): string
-    {
-        return $path;
+        return $bytes;
     }
 }
