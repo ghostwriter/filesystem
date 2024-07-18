@@ -34,7 +34,12 @@ trait PathTrait
     #[Override]
     public function exists(): bool
     {
-        return $this->splFileInfo->isFile() || $this->splFileInfo->isDir() || $this->splFileInfo->isLink();
+        return match (true) {
+            $this->splFileInfo->isFile(),
+            $this->splFileInfo->isDir(),
+            $this->splFileInfo->isLink() => true,
+            default => false,
+        };
     }
 
     #[Override]
