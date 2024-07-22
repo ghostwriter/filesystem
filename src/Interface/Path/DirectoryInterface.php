@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\Filesystem\Interface\Path;
 
-use Generator;
 use Ghostwriter\Filesystem\Interface\PathInterface;
 
 interface DirectoryInterface extends PathInterface
