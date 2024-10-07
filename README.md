@@ -1,6 +1,6 @@
 # Filesystem
 
-[![Compliance](https://github.com/ghostwriter/filesystem/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/filesystem/actions/workflows/compliance.yml)
+[![Automation](https://github.com/ghostwriter/filesystem/actions/workflows/automation.yml/badge.svg)](https://github.com/ghostwriter/filesystem/actions/workflows/automation.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/filesystem?color=8892bf)](https://www.php.net/supported-versions)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/filesystem&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
 [![Code Coverage](https://codecov.io/gh/ghostwriter/filesystem/branch/main/graph/badge.svg)](https://codecov.io/gh/ghostwriter/filesystem)
