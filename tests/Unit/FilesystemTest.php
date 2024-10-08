@@ -62,13 +62,35 @@ final class FilesystemTest extends AbstractTestCase
     /**
      * @throws Throwable
      */
+    public function testChdir(): void
+    {
+        $filesystem = Filesystem::new();
+
+        $directory = self::$temporaryDirectory . 'directory';
+
+        $filesystem->createDirectory($directory);
+
+        $currentWorkingDirectory = $filesystem->currentWorkingDirectory();
+
+        $filesystem->chdir($directory);
+
+        self::assertSame($directory, $filesystem->currentWorkingDirectory());
+
+        $filesystem->chdir($currentWorkingDirectory);
+
+        self::assertSame($currentWorkingDirectory, $filesystem->currentWorkingDirectory());
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function testChmod(): void
     {
         $filesystem = Filesystem::new();
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -94,7 +116,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -118,7 +140,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $target = self::$temporaryDirectory . 'target.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($source, $contents);
 
@@ -210,7 +232,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -232,7 +254,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -252,7 +274,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -278,7 +300,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileDoesNotExist($link);
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($target, $contents);
 
@@ -308,7 +330,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileDoesNotExist($file);
 
-        $filesystem->write($file, 'Hello, world!');
+        $filesystem->write($file, '#BlackLivesMatter');
 
         self::assertFileExists($file);
 
@@ -350,7 +372,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -372,7 +394,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -391,7 +413,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -411,7 +433,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -436,7 +458,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileDoesNotExist($link);
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($target, $contents);
 
@@ -461,7 +483,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -479,7 +501,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -497,7 +519,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -515,7 +537,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -539,7 +561,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileDoesNotExist($link);
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($target, $contents);
 
@@ -565,7 +587,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $expected = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($expected, $contents);
 
@@ -605,7 +627,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $target = self::$temporaryDirectory . 'target.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($source, $contents);
 
@@ -683,7 +705,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -721,7 +743,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -746,7 +768,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $expected = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($expected, $contents);
 
@@ -772,7 +794,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $expected = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($expected, $contents);
 
@@ -818,7 +840,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
@@ -842,7 +864,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileDoesNotExist($link);
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($target, $contents);
 
@@ -874,7 +896,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $file = self::$temporaryDirectory . 'file.txt';
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $filesystem->write($file, $contents);
 
