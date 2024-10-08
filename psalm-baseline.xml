@@ -6,13 +6,6 @@
       <code><![CDATA[$mode]]></code>
       <code><![CDATA[$mode]]></code>
     </ArgumentTypeCoercion>
-    <DocblockTypeContradiction>
-      <code><![CDATA[0]]></code>
-      <code><![CDATA[0]]></code>
-      <code><![CDATA[0]]></code>
-      <code><![CDATA[0]]></code>
-      <code><![CDATA[0]]></code>
-    </DocblockTypeContradiction>
     <LessSpecificReturnType>
       <code><![CDATA[Generator]]></code>
       <code><![CDATA[RecursiveIteratorIterator]]></code>
@@ -21,17 +14,15 @@
       <code><![CDATA[string]]></code>
       <code><![CDATA[string]]></code>
       <code><![CDATA[string]]></code>
-      <code><![CDATA[void]]></code>
     </LessSpecificReturnType>
     <MissingThrowsDocblock>
       <code><![CDATA[safely]]></code>
     </MissingThrowsDocblock>
     <PossiblyInvalidArgument>
-      <code><![CDATA[$e->getCode() ?? 0]]></code>
-      <code><![CDATA[$e->getCode()?? 0]]></code>
-      <code><![CDATA[$e->getCode()?? 0]]></code>
-      <code><![CDATA[$e->getCode()?? 0]]></code>
-      <code><![CDATA[$throwable->getCode()?? 0]]></code>
+      <code><![CDATA[$throwable->getCode()]]></code>
+      <code><![CDATA[$throwable->getCode()]]></code>
+      <code><![CDATA[$throwable->getCode()]]></code>
+      <code><![CDATA[$throwable->getCode()]]></code>
     </PossiblyInvalidArgument>
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$relPath[0]]]></code>
@@ -45,9 +36,6 @@
     </UnusedClosureParam>
   </file>
   <file src="tests/Unit/FilesystemTest.php">
-    <MixedMethodCall>
-      <code><![CDATA[getPathname]]></code>
-    </MixedMethodCall>
     <PossiblyInvalidMethodCall>
       <code><![CDATA[getPathname]]></code>
     </PossiblyInvalidMethodCall>
