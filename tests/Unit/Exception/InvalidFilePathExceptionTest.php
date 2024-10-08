@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\Filesystem\Exception\InvalidFilePathException;
+use Ghostwriter\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
+use Tests\Unit\AbstractTestCase;
 
 #[CoversClass(InvalidFilePathException::class)]
-final class InvalidFilePathExceptionTest extends TestCase
+#[CoversClass(Filesystem::class)]
+final class InvalidFilePathExceptionTest extends AbstractTestCase
 {
     public function testExample(): void
     {
