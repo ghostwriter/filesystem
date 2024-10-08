@@ -18,6 +18,8 @@ interface FilesystemInterface
 
     public function basename(string $path, string $suffix = ''): string;
 
+    public function chdir(string $directory): void;
+
     public function chmod(string $path, int $mode): void;
 
     public function cleanDirectory(string $directory): void;
