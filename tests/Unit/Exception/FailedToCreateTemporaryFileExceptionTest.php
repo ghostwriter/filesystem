@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\Filesystem\Exception\FailedToCreateTemporaryFileException;
+use Ghostwriter\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
+use Tests\Unit\AbstractTestCase;
 
 #[CoversClass(FailedToCreateTemporaryFileException::class)]
-final class FailedToCreateTemporaryFileExceptionTest extends TestCase
+#[CoversClass(Filesystem::class)]
+final class FailedToCreateTemporaryFileExceptionTest extends AbstractTestCase
 {
     public function testExample(): void
     {
