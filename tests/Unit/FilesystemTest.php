@@ -11,6 +11,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use SplFileInfo;
 use Throwable;
 
+use const DIRECTORY_SEPARATOR;
+
 #[CoversClass(Filesystem::class)]
 #[CoversClass(Path::class)]
 final class FilesystemTest extends AbstractTestCase
@@ -91,7 +93,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $file = $directory . '/file.txt';
+        $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -229,7 +231,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $file = $directory . '/file.txt';
+        $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -347,7 +349,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $file = $directory . '/file.txt';
+        $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -369,7 +371,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $file = $directory . '/file.txt';
+        $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -408,7 +410,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $file = $directory . '/file.txt';
+        $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -562,7 +564,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $expected = $directory . '/file.txt';
+        $expected = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -718,7 +720,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $file = $directory . '/file.txt';
+        $file = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -743,7 +745,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $expected = $directory . '/file.txt';
+        $expected = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -769,7 +771,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $directory = self::$temporaryDirectory . 'directory';
 
-        $expected = $directory . '/file.txt';
+        $expected = $directory . DIRECTORY_SEPARATOR . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -778,7 +780,7 @@ final class FilesystemTest extends AbstractTestCase
         foreach (
             $filesystem->recursiveRegexIterator(
                 $filesystem->recursiveDirectoryIterator($directory),
-                '/\.txt$/',
+                '#\.txt$#iu',
             ) as $file => $fileInfo
         ) {
             self::assertSame($expected, $file);
