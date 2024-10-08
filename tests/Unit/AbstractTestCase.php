@@ -47,11 +47,12 @@ abstract class AbstractTestCase extends TestCase
     public static function temporaryDirectory(): string
     {
         $path = \sprintf(
-            '%s%sFixture%s%s',
+            '%s%sFixture%s%s%s',
             \dirname(__DIR__),
             DIRECTORY_SEPARATOR,
             DIRECTORY_SEPARATOR,
-            \mb_substr(\mb_strrchr(static::class, '\\'), 1)
+            \mb_substr(\mb_strrchr(static::class, '\\'), 1),
+            DIRECTORY_SEPARATOR
         );
 
         if (! \is_dir($path)) {
