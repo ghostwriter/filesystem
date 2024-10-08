@@ -182,7 +182,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileDoesNotExist($file);
 
-        $filesystem->createFile($file);
+        self::assertSame(0, $filesystem->createFile($file));
 
         self::assertFileExists($file);
 
