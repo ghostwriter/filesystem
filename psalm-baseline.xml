@@ -1,89 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.25.0@01a8eb06b9e9cc6cfb6a320bf9fb14331919d505">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="src/Filesystem.php">
-    <LessSpecificReturnStatement>
-      <code><![CDATA[$temporaryFile]]></code>
-    </LessSpecificReturnStatement>
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$flags]]></code>
+      <code><![CDATA[$mode]]></code>
+      <code><![CDATA[$mode]]></code>
+    </ArgumentTypeCoercion>
+    <DocblockTypeContradiction>
+      <code><![CDATA[0]]></code>
+      <code><![CDATA[0]]></code>
+      <code><![CDATA[0]]></code>
+      <code><![CDATA[0]]></code>
+      <code><![CDATA[0]]></code>
+    </DocblockTypeContradiction>
+    <LessSpecificReturnType>
+      <code><![CDATA[Generator]]></code>
+      <code><![CDATA[RecursiveIteratorIterator]]></code>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[void]]></code>
+    </LessSpecificReturnType>
     <MissingThrowsDocblock>
-      <code><![CDATA[throw new DirectoryAlreadyExistsException($path);]]></code>
-      <code><![CDATA[throw new FailedToCopyFileException($source);]]></code>
-      <code><![CDATA[throw new FailedToCreateDirectoryException($path);]]></code>
-      <code><![CDATA[throw new FailedToCreateFileException($path);]]></code>
-      <code><![CDATA[throw new FailedToCreateTemporaryFileException();]]></code>
-      <code><![CDATA[throw new FailedToDeleteDirectoryException($path);]]></code>
-      <code><![CDATA[throw new FailedToDeleteFileException($path);]]></code>
-      <code><![CDATA[throw new FailedToDeleteLinkException($path);]]></code>
-      <code><![CDATA[throw new FailedToDetermineCurrentWorkingDirectoryException();]]></code>
-      <code><![CDATA[throw new FailedToFileGetContentsException($path);]]></code>
-      <code><![CDATA[throw new FileAlreadyExistsException($path);]]></code>
-      <code><![CDATA[throw new FileDoesNotExistException($path);]]></code>
-      <code><![CDATA[throw new FileIsNotReadableException($path);]]></code>
-      <code><![CDATA[write]]></code>
+      <code><![CDATA[safely]]></code>
     </MissingThrowsDocblock>
-    <MoreSpecificReturnType>
-      <code><![CDATA[non-empty-string]]></code>
-    </MoreSpecificReturnType>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$e->getCode() ?? 0]]></code>
+      <code><![CDATA[$e->getCode()?? 0]]></code>
+      <code><![CDATA[$e->getCode()?? 0]]></code>
+      <code><![CDATA[$e->getCode()?? 0]]></code>
+      <code><![CDATA[$throwable->getCode()?? 0]]></code>
+    </PossiblyInvalidArgument>
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$relPath[0]]]></code>
     </PossiblyUndefinedArrayOffset>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[__construct]]></code>
-    </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[int]]></code>
+      <code><![CDATA[int]]></code>
+    </PossiblyUnusedReturnValue>
+    <UnusedClosureParam>
+      <code><![CDATA[$filesystem]]></code>
+    </UnusedClosureParam>
   </file>
-  <file src="src/Interface/FilesystemInterface.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[append]]></code>
-      <code><![CDATA[basename]]></code>
-      <code><![CDATA[copy]]></code>
-      <code><![CDATA[createFile]]></code>
-      <code><![CDATA[createTemporaryDirectory]]></code>
-      <code><![CDATA[createTemporaryFile]]></code>
-      <code><![CDATA[currentWorkingDirectory]]></code>
-      <code><![CDATA[exists]]></code>
-      <code><![CDATA[extension]]></code>
-      <code><![CDATA[filename]]></code>
-      <code><![CDATA[isExecutable]]></code>
-      <code><![CDATA[lastAccessTime]]></code>
-      <code><![CDATA[lastChangeTime]]></code>
-      <code><![CDATA[lastModifiedTime]]></code>
-      <code><![CDATA[link]]></code>
-      <code><![CDATA[linkInfo]]></code>
-      <code><![CDATA[linkTarget]]></code>
-      <code><![CDATA[listDirectory]]></code>
-      <code><![CDATA[move]]></code>
-      <code><![CDATA[parentDirectory]]></code>
-      <code><![CDATA[pathname]]></code>
-      <code><![CDATA[prepend]]></code>
-      <code><![CDATA[realpath]]></code>
-      <code><![CDATA[recursiveIterator]]></code>
-      <code><![CDATA[relative]]></code>
-      <code><![CDATA[size]]></code>
-    </PossiblyUnusedMethod>
+  <file src="tests/Unit/FilesystemTest.php">
+    <MixedMethodCall>
+      <code><![CDATA[getPathname]]></code>
+    </MixedMethodCall>
+    <PossiblyInvalidMethodCall>
+      <code><![CDATA[getPathname]]></code>
+    </PossiblyInvalidMethodCall>
   </file>
-  <file src="src/Interface/PathInterface.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[basename]]></code>
-      <code><![CDATA[exists]]></code>
-      <code><![CDATA[extension]]></code>
-      <code><![CDATA[filename]]></code>
-      <code><![CDATA[isExecutable]]></code>
-      <code><![CDATA[isFile]]></code>
-      <code><![CDATA[isLink]]></code>
-      <code><![CDATA[isReadable]]></code>
-      <code><![CDATA[isWritable]]></code>
-      <code><![CDATA[lastAccessTime]]></code>
-      <code><![CDATA[lastChangeTime]]></code>
-      <code><![CDATA[lastModifiedTime]]></code>
-      <code><![CDATA[linkTarget]]></code>
-      <code><![CDATA[parent]]></code>
-      <code><![CDATA[realpath]]></code>
-      <code><![CDATA[size]]></code>
-      <code><![CDATA[toString]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Trait/PathTrait.php">
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new InvalidDirectoryPathException($path);]]></code>
-    </MissingThrowsDocblock>
+  <file src="tests/Unit/PathTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$path]]></code>
+    </ArgumentTypeCoercion>
   </file>
 </files>
