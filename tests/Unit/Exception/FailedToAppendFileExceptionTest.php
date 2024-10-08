@@ -21,7 +21,7 @@ final class FailedToAppendFileExceptionTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         self::assertFileDoesNotExist($file);
 
