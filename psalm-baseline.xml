@@ -9,31 +9,15 @@
     <LessSpecificReturnType>
       <code><![CDATA[Generator]]></code>
       <code><![CDATA[RecursiveIteratorIterator]]></code>
-      <code><![CDATA[string]]></code>
-      <code><![CDATA[string]]></code>
-      <code><![CDATA[string]]></code>
-      <code><![CDATA[string]]></code>
+      <code><![CDATA[non-empty-string]]></code>
       <code><![CDATA[string]]></code>
     </LessSpecificReturnType>
-    <MissingThrowsDocblock>
-      <code><![CDATA[safely]]></code>
-    </MissingThrowsDocblock>
-    <PossiblyInvalidArgument>
-      <code><![CDATA[$throwable->getCode()]]></code>
-      <code><![CDATA[$throwable->getCode()]]></code>
-      <code><![CDATA[$throwable->getCode()]]></code>
-      <code><![CDATA[$throwable->getCode()]]></code>
-    </PossiblyInvalidArgument>
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$relPath[0]]]></code>
     </PossiblyUndefinedArrayOffset>
     <PossiblyUnusedReturnValue>
       <code><![CDATA[int]]></code>
-      <code><![CDATA[int]]></code>
     </PossiblyUnusedReturnValue>
-    <UnusedClosureParam>
-      <code><![CDATA[$filesystem]]></code>
-    </UnusedClosureParam>
   </file>
   <file src="tests/Unit/FilesystemTest.php">
     <PossiblyInvalidMethodCall>
