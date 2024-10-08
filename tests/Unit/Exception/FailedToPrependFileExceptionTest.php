@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\Filesystem\Exception\FailedToPrependFileException;
+use Ghostwriter\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
+use Tests\Unit\AbstractTestCase;
 
 #[CoversClass(FailedToPrependFileException::class)]
-final class FailedToPrependFileExceptionTest extends TestCase
+#[CoversClass(Filesystem::class)]
+final class FailedToPrependFileExceptionTest extends AbstractTestCase
 {
     public function testExample(): void
     {
