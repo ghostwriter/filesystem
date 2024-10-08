@@ -35,8 +35,7 @@
         "php": ">=8.3"
     },
     "require-dev": {
-        "ghostwriter/coding-standard": "dev-main",
-        "symfony/var-dumper": "^7.1"
+        "ghostwriter/coding-standard": "dev-main"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
