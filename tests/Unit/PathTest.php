@@ -15,6 +15,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversClass(Filesystem::class)]
 final class PathTest extends AbstractTestCase
 {
+    /**
+     * @param non-empty-string $path
+     */
     #[DataProvider('providePathCases')]
     public function testPath(string $path): void
     {
