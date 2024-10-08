@@ -5,14 +5,31 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\Filesystem\Exception\FailedToAppendFileException;
+use Ghostwriter\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
+use Tests\Unit\AbstractTestCase;
+use Throwable;
 
 #[CoversClass(FailedToAppendFileException::class)]
-final class FailedToAppendFileExceptionTest extends TestCase
+#[CoversClass(Filesystem::class)]
+final class FailedToAppendFileExceptionTest extends AbstractTestCase
 {
-    public function testExample(): void
+    /**
+     * @throws Throwable
+     */
+    public function testAppend(): void
     {
-        self::assertTrue(true);
+        $filesystem = Filesystem::new();
+
+        $file = self::$temporaryDirectory . '/file.txt';
+
+        self::assertFileDoesNotExist($file);
+
+        $contents = 'Hello, world!';
+
+        $this->expectException(FailedToAppendFileException::class);
+        $this->expectExceptionMessage($file);
+
+        $filesystem->append($file, $contents);
     }
 }
