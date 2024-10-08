@@ -5,14 +5,36 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\Filesystem\Exception\InvalidPathException;
+use Ghostwriter\Filesystem\Filesystem;
+use Ghostwriter\Filesystem\Path;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
+use Tests\Unit\AbstractTestCase;
+use Throwable;
 
 #[CoversClass(InvalidPathException::class)]
-final class InvalidPathExceptionTest extends TestCase
+#[CoversClass(Path::class)]
+#[CoversClass(Filesystem::class)]
+final class InvalidPathExceptionTest extends AbstractTestCase
 {
-    public function testExample(): void
+    /**
+     * @throws Throwable
+     */
+    public function testEmptyPathConstruct(): void
     {
-        self::assertTrue(true);
+        $this->expectException(InvalidPathException::class);
+        $this->expectExceptionMessage('The path cannot be empty.');
+
+        new Path(' ');
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testEmptyPathNew(): void
+    {
+        $this->expectException(InvalidPathException::class);
+        $this->expectExceptionMessage('The path cannot be empty.');
+
+        Path::new(' ');
     }
 }
