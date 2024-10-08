@@ -7,6 +7,7 @@ namespace Ghostwriter\Filesystem;
 use Closure;
 use FilesystemIterator;
 use Generator;
+use Ghostwriter\Filesystem\Exception\DestinationAlreadyExistsException;
 use Ghostwriter\Filesystem\Exception\DirectoryAlreadyExistsException;
 use Ghostwriter\Filesystem\Exception\DirectoryDoesNotExistException;
 use Ghostwriter\Filesystem\Exception\ErrorException;
@@ -18,6 +19,7 @@ use Ghostwriter\Filesystem\Exception\FailedToCopyFileException;
 use Ghostwriter\Filesystem\Exception\FailedToCreateDirectoryException;
 use Ghostwriter\Filesystem\Exception\FailedToCreateFileException;
 use Ghostwriter\Filesystem\Exception\FailedToCreateLinkException;
+use Ghostwriter\Filesystem\Exception\FailedToCreateTemporaryDirectoryException;
 use Ghostwriter\Filesystem\Exception\FailedToCreateTemporaryFileException;
 use Ghostwriter\Filesystem\Exception\FailedToDeleteDirectoryException;
 use Ghostwriter\Filesystem\Exception\FailedToDeleteFileException;
@@ -36,6 +38,7 @@ use Ghostwriter\Filesystem\Exception\FileIsNotReadableException;
 use Ghostwriter\Filesystem\Exception\FileIsNotWritableException;
 use Ghostwriter\Filesystem\Exception\LinkDoesNotExistException;
 use Ghostwriter\Filesystem\Exception\ShouldNotHappenException;
+use Ghostwriter\Filesystem\Exception\SourceDoesNotExistException;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use Ghostwriter\Filesystem\Interface\FilesystemInterface;
 use Ghostwriter\Filesystem\Interface\PathInterface;
@@ -66,13 +69,10 @@ final class Filesystem implements FilesystemInterface
     public function append(string $path, string $contents): int
     {
         return $this->safely(
-            static function (FilesystemInterface $filesystem) use ($path, $contents): int {
-                try {
-                    return $filesystem->write($path, $filesystem->read($path) . $contents);
-                } catch (Throwable $throwable) {
-                    throw new FailedToAppendFileException($path, $throwable->getCode(), $throwable);
-                }
-            },
+            static fn (
+                FilesystemInterface $filesystem
+            ): int => $filesystem->write($path, $filesystem->read($path) . $contents),
+            FailedToAppendFileException::class
         );
 
     }
@@ -137,19 +137,21 @@ final class Filesystem implements FilesystemInterface
     {
         $this->safely(static function (FilesystemInterface $filesystem) use ($source, $destination): void {
             if ($filesystem->missing($source)) {
-                throw new ShouldNotHappenException('Source file does not exist: ' . $source);
+                throw new SourceDoesNotExistException($source);
             }
 
             if ($filesystem->exists($destination)) {
-                throw new ShouldNotHappenException('Destination file already exists: ' . $destination);
+                throw new DestinationAlreadyExistsException($destination);
             }
 
             $copied = \copy($source, $destination);
 
             if ($copied === false) {
-                throw new FailedToCopyFileException(\sprintf('Could not copy file: %s to %s', $source, $destination));
+                throw new FailedToCopyFileException(
+                    \sprintf('Could not copy file: %s to %s', $source, $destination)
+                );
             }
-        });
+        }, FailedToCopyFileException::class);
     }
 
     /**
@@ -168,7 +170,7 @@ final class Filesystem implements FilesystemInterface
             if ($created === false && ! $filesystem->isDirectory($path)) {
                 throw new FailedToCreateDirectoryException('Could not create directory: ' . $path);
             }
-        });
+        }, FailedToCreateDirectoryException::class);
     }
 
     /**
@@ -177,38 +179,43 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function createFile(string $path, string $contents = ''): int
     {
-        return $this->safely(static function (FilesystemInterface $filesystem) use ($path, $contents): int {
-            $filesystem->touch($path);
+        return $this->safely(
+            static function (FilesystemInterface $filesystem) use ($path, $contents): int {
+                $filesystem->touch($path);
 
-            if (\trim($contents) === '') {
-                return 0;
-            }
+                if (\trim($contents) === '') {
+                    return 0;
+                }
 
-            try {
                 return $filesystem->write($path, $contents);
-            } catch (Throwable $throwable) {
-                throw new FailedToCreateFileException($path, $throwable->getCode(), $throwable);
-            }
-        });
+            },
+            FailedToCreateFileException::class
+        );
     }
 
     /**
      * @throws FilesystemExceptionInterface
+     *
+     * @return non-empty-string
      */
     #[Override]
     public function createTemporaryDirectory(string $prefix = ''): string
     {
-        return $this->safely(static function (FilesystemInterface $filesystem) use ($prefix): string {
-            $temporaryDirectory = $filesystem->temporaryDirectory();
+        return $this->safely(
+            /** @return non-empty-string **/
+            static function (FilesystemInterface $filesystem) use ($prefix): string {
+                $temporaryDirectory = $filesystem->temporaryDirectory();
 
-            $temporaryDirectory = \sprintf('%s%s%s', $temporaryDirectory, DIRECTORY_SEPARATOR, $prefix);
+                $temporaryDirectory = \sprintf('%s%s%s', $temporaryDirectory, DIRECTORY_SEPARATOR, $prefix);
 
-            if ($filesystem->missing($temporaryDirectory)) {
-                $filesystem->createDirectory($temporaryDirectory);
-            }
+                if ($filesystem->missing($temporaryDirectory)) {
+                    $filesystem->createDirectory($temporaryDirectory);
+                }
 
-            return $temporaryDirectory;
-        });
+                return $temporaryDirectory;
+            },
+            FailedToCreateTemporaryDirectoryException::class
+        );
     }
 
     /**
@@ -219,18 +226,22 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function createTemporaryFile(string $prefix = ''): string
     {
-        return $this->safely(static function (FilesystemInterface $filesystem) use ($prefix): string {
-            $temporaryDirectory = $filesystem->temporaryDirectory();
+        return $this->safely(
+            /** @return non-empty-string **/
+            static function (FilesystemInterface $filesystem) use ($prefix): string {
+                $temporaryDirectory = $filesystem->temporaryDirectory();
 
-            /** @var false|non-empty-string $temporaryFile */
-            $temporaryFile = \tempnam($temporaryDirectory, $prefix);
+                /** @var false|non-empty-string $temporaryFile */
+                $temporaryFile = \tempnam($temporaryDirectory, $prefix);
 
-            if ($temporaryFile === false) {
-                throw new FailedToCreateTemporaryFileException();
-            }
+                if ($temporaryFile === false) {
+                    throw new FailedToCreateTemporaryFileException();
+                }
 
-            return $temporaryFile;
-        });
+                return $temporaryFile;
+            },
+            FailedToCreateTemporaryFileException::class
+        );
     }
 
     /**
@@ -239,15 +250,19 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function currentWorkingDirectory(): string
     {
-        return $this->safely(static function (): string {
-            $workingDirectory = \getcwd();
+        return $this->safely(
+            /** @return non-empty-string **/
+            static function (): string {
+                $workingDirectory = \getcwd();
 
-            if ($workingDirectory === false) {
-                throw new FailedToDetermineCurrentWorkingDirectoryException();
-            }
+                if ($workingDirectory === false) {
+                    throw new FailedToDetermineCurrentWorkingDirectoryException();
+                }
 
-            return $workingDirectory;
-        });
+                return $workingDirectory;
+            },
+            FailedToDetermineCurrentWorkingDirectoryException::class
+        );
     }
 
     /**
@@ -287,7 +302,7 @@ final class Filesystem implements FilesystemInterface
             if ($deleted === false) {
                 throw new FailedToDeleteDirectoryException('Could not delete directory: ' . $path);
             }
-        });
+        }, FailedToDeleteDirectoryException::class);
     }
 
     /**
@@ -306,7 +321,7 @@ final class Filesystem implements FilesystemInterface
             if ($deleted === false) {
                 throw new FailedToDeleteFileException($path);
             }
-        });
+        }, FailedToDeleteFileException::class);
     }
 
     /**
@@ -325,7 +340,7 @@ final class Filesystem implements FilesystemInterface
             if ($deleted === false) {
                 throw new FailedToDeleteLinkException($path);
             }
-        });
+        }, FailedToDeleteLinkException::class);
     }
 
     /**
@@ -453,15 +468,18 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function linkTarget(string $path): string
     {
-        return $this->safely(static function () use ($path): string {
-            $target = \readlink($path);
+        return $this->safely(
+            static function () use ($path): string {
+                $target = \readlink($path);
 
-            if ($target === false) {
-                throw new FailedToReadLinkException($path);
-            }
+                if ($target === false) {
+                    throw new FailedToReadLinkException($path);
+                }
 
-            return $target;
-        });
+                return $target;
+            },
+            FailedToReadLinkException::class
+        );
     }
 
     /**
@@ -502,21 +520,24 @@ final class Filesystem implements FilesystemInterface
             if ($moved === false) {
                 throw new FailedToRenamePathException(\sprintf('Could not move file: %s to %s', $source, $destination));
             }
-        });
+        }, FailedToRenamePathException::class);
     }
 
     /**
      * @param int<1,max> $levels
+     *
+     * @throws FilesystemExceptionInterface
      */
     #[Override]
     public function parentDirectory(string $path, int $levels = 1): string
     {
-        return $this->safely(static fn (FilesystemInterface $filesystem): string => \dirname($path, $levels));
+        return $this->safely(static fn (): string => \dirname($path, $levels));
     }
 
     #[Override]
     public function pathname(string $path): string
     {
+        // TODO: \pathinfo() *face-palm*
         return $path;
     }
 
@@ -529,6 +550,7 @@ final class Filesystem implements FilesystemInterface
     public function permissions(string $path): string
     {
         return $this->safely(
+            /** @return non-empty-string **/
             static function () use ($path): string {
                 \clearstatcache(true, $path);
 
@@ -549,13 +571,12 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function prepend(string $path, string $contents): int
     {
-        return $this->safely(static function (FilesystemInterface $filesystem) use ($path, $contents): int {
-            try {
-                return $filesystem->write($path, $contents . $filesystem->read($path));
-            } catch (Throwable $throwable) {
-                throw new FailedToPrependFileException($path, $throwable->getCode(), $throwable);
-            }
-        });
+        return $this->safely(
+            static fn (
+                FilesystemInterface $filesystem
+            ): int => $filesystem->write($path, $contents . $filesystem->read($path)),
+            FailedToPrependFileException::class
+        );
     }
 
     /**
@@ -579,7 +600,7 @@ final class Filesystem implements FilesystemInterface
             }
 
             return $contents;
-        });
+        }, FailedToFileGetContentsException::class);
     }
 
     /**
@@ -596,7 +617,7 @@ final class Filesystem implements FilesystemInterface
             }
 
             return $target;
-        });
+        }, FailedToDetermineRealPathException::class);
     }
 
     /**
@@ -724,7 +745,7 @@ final class Filesystem implements FilesystemInterface
             }
 
             return $size;
-        });
+        }, FailedToDetermineFileSizeException::class);
     }
 
     /**
@@ -739,7 +760,7 @@ final class Filesystem implements FilesystemInterface
             if ($symlinked === false) {
                 throw new FailedToCreateLinkException($link);
             }
-        });
+        }, FailedToCreateLinkException::class);
     }
 
     /**
@@ -777,7 +798,7 @@ final class Filesystem implements FilesystemInterface
             if ($touched === false) {
                 throw new FailedToCreateFileException($path);
             }
-        });
+        }, FailedToCreateFileException::class);
     }
 
     /**
@@ -802,7 +823,7 @@ final class Filesystem implements FilesystemInterface
             }
 
             return $bytesWritten;
-        });
+        }, FailedToFilePutContentsException::class);
     }
 
     /**
@@ -817,7 +838,9 @@ final class Filesystem implements FilesystemInterface
     private function safely(Closure $function, string $class = ShouldNotHappenException::class): mixed
     {
         if (! \is_a($class, FilesystemExceptionInterface::class, true)) {
-            throw new ShouldNotHappenException($class . ' is not a valid exception class.');
+            throw new ShouldNotHappenException(
+                \sprintf('Class "%s" MUST implement "%s".', $class, FilesystemExceptionInterface::class)
+            );
         }
 
         try {
@@ -827,15 +850,8 @@ final class Filesystem implements FilesystemInterface
 
             /** @var TMixed */
             return $function($this);
-        } catch (ErrorException $throwable) {
-            // rethrow PHP errors as exceptions
-            throw new $class($throwable->getMessage(), $throwable->getCode(), $throwable);
-        } catch (FilesystemExceptionInterface $throwable) {
-            // rethrow our own exceptions
-            throw $throwable;
         } catch (Throwable $throwable) {
-            // wrap any other exceptions
-            throw new ShouldNotHappenException($throwable->getMessage(), $throwable->getCode(), $throwable);
+            throw new $class($throwable->getMessage(), $throwable->getCode(), $throwable);
         } finally {
             \restore_error_handler();
         }
