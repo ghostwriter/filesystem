@@ -89,6 +89,21 @@ final class Filesystem implements FilesystemInterface
      * @throws FilesystemExceptionInterface
      */
     #[Override]
+    public function chdir(string $directory): void
+    {
+        $this->safely(static function () use ($directory): void {
+            $changed = \chdir($directory);
+
+            if ($changed === false) {
+                throw new FailedToChangeDirectoryException($directory);
+            }
+        });
+    }
+
+    /**
+     * @throws FilesystemExceptionInterface
+     */
+    #[Override]
     public function chmod(string $path, int $mode): void
     {
         $this->safely(static function () use ($path, $mode): void {
@@ -240,11 +255,17 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function delete(string $path): void
     {
+        $currentWorkingDirectory = $this->currentWorkingDirectory();
+
+        $this->chdir($this->parentDirectory($path));
+
         match (true) {
             $this->isLink($path) => $this->deleteLink($path),
             $this->isDirectory($path) => $this->deleteDirectory($path),
             default => $this->deleteFile($path),
         };
+
+        $this->chdir($currentWorkingDirectory);
     }
 
     /**
