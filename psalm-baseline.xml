@@ -40,9 +40,4 @@
       <code><![CDATA[getPathname]]></code>
     </PossiblyInvalidMethodCall>
   </file>
-  <file src="tests/Unit/PathTest.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA[$path]]></code>
-    </ArgumentTypeCoercion>
-  </file>
 </files>
