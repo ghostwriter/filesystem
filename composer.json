@@ -35,7 +35,8 @@
         "php": ">=8.3"
     },
     "require-dev": {
-        "ghostwriter/coding-standard": "dev-main"
+        "ghostwriter/coding-standard": "dev-main",
+        "symfony/var-dumper": "^7.1"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -99,6 +100,7 @@
         "psalm:shepherd": "@psalm --no-diff --shepherd --stats",
         "psalm:update": "@psalm --no-diff --update-baseline=psalm-baseline.xml",
         "rector": "@bin_rector",
+        "rector:dry-run": "@rector --dry-run",
         "test": [
             "@phpunit",
             "@psalm:shepherd",
