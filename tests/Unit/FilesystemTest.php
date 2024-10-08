@@ -11,8 +11,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use SplFileInfo;
 use Throwable;
 
-use const DIRECTORY_SEPARATOR;
-
 #[CoversClass(Filesystem::class)]
 #[CoversClass(Path::class)]
 final class FilesystemTest extends AbstractTestCase
@@ -24,7 +22,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $prefix = 'Hello, ';
 
@@ -52,7 +50,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $path = self::$temporaryDirectory . '/file.txt';
+        $path = self::$temporaryDirectory . 'file.txt';
 
         self::assertSame('file.txt', $filesystem->basename($path));
 
@@ -66,7 +64,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -91,7 +89,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $file = $directory . '/file.txt';
 
@@ -115,9 +113,9 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $source = self::$temporaryDirectory . '/source.txt';
+        $source = self::$temporaryDirectory . 'source.txt';
 
-        $target = self::$temporaryDirectory . '/target.txt';
+        $target = self::$temporaryDirectory . 'target.txt';
 
         $contents = 'Hello, world!';
 
@@ -141,7 +139,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         self::assertDirectoryDoesNotExist($directory);
 
@@ -157,7 +155,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         self::assertFileDoesNotExist($file);
 
@@ -209,7 +207,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -229,7 +227,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $file = $directory . '/file.txt';
 
@@ -251,7 +249,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -271,11 +269,11 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $target = self::$temporaryDirectory . '/target.txt';
+        $target = self::$temporaryDirectory . 'target.txt';
 
         self::assertFileDoesNotExist($target);
 
-        $link = self::$temporaryDirectory . '/link.txt';
+        $link = self::$temporaryDirectory . 'link.txt';
 
         self::assertFileDoesNotExist($link);
 
@@ -305,7 +303,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         self::assertFileDoesNotExist($file);
 
@@ -323,7 +321,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $path = self::$temporaryDirectory . '/file.txt';
+        $path = self::$temporaryDirectory . 'file.txt';
 
         self::assertSame('txt', $filesystem->extension($path));
     }
@@ -335,7 +333,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $path = self::$temporaryDirectory . '/file.txt';
+        $path = self::$temporaryDirectory . 'file.txt';
 
         self::assertSame('file', $filesystem->filename($path));
     }
@@ -347,7 +345,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $file = $directory . '/file.txt';
 
@@ -369,7 +367,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $file = $directory . '/file.txt';
 
@@ -390,7 +388,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -408,7 +406,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $file = $directory . '/file.txt';
 
@@ -429,11 +427,11 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $target = self::$temporaryDirectory . '/target.txt';
+        $target = self::$temporaryDirectory . 'target.txt';
 
         self::assertFileDoesNotExist($target);
 
-        $link = self::$temporaryDirectory . '/link.txt';
+        $link = self::$temporaryDirectory . 'link.txt';
 
         self::assertFileDoesNotExist($link);
 
@@ -460,7 +458,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -478,7 +476,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -496,7 +494,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -514,7 +512,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -532,11 +530,11 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $target = self::$temporaryDirectory . '/target.txt';
+        $target = self::$temporaryDirectory . 'target.txt';
 
         self::assertFileDoesNotExist($target);
 
-        $link = self::$temporaryDirectory . '/link.txt';
+        $link = self::$temporaryDirectory . 'link.txt';
 
         self::assertFileDoesNotExist($link);
 
@@ -562,7 +560,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $expected = $directory . '/file.txt';
 
@@ -588,7 +586,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         self::assertFileDoesNotExist($file);
 
@@ -602,9 +600,9 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $source = self::$temporaryDirectory . '/source.txt';
+        $source = self::$temporaryDirectory . 'source.txt';
 
-        $target = self::$temporaryDirectory . '/target.txt';
+        $target = self::$temporaryDirectory . 'target.txt';
 
         $contents = 'Hello, world!';
 
@@ -630,9 +628,9 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $path = self::$temporaryDirectory . '/directory/file.txt';
+        $path = self::$temporaryDirectory . 'directory/file.txt';
 
-        self::assertSame(self::$temporaryDirectory . '/directory', $filesystem->parentDirectory($path));
+        self::assertSame(self::$temporaryDirectory . 'directory', $filesystem->parentDirectory($path));
     }
 
     /**
@@ -642,7 +640,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $path = self::$temporaryDirectory . '/file.txt';
+        $path = self::$temporaryDirectory . 'file.txt';
 
         self::assertSame($path, $filesystem->pathname($path));
     }
@@ -654,7 +652,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $prefix = 'Hello, ';
 
@@ -682,7 +680,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -700,7 +698,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . DIRECTORY_SEPARATOR . 'file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = '#BlackLivesMatter';
 
@@ -718,7 +716,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $file = $directory . '/file.txt';
 
@@ -743,7 +741,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $expected = $directory . '/file.txt';
 
@@ -769,7 +767,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $directory = self::$temporaryDirectory . '/directory';
+        $directory = self::$temporaryDirectory . 'directory';
 
         $expected = $directory . '/file.txt';
 
@@ -799,9 +797,9 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $from = self::$temporaryDirectory . '/from';
+        $from = self::$temporaryDirectory . 'from';
 
-        $to = self::$temporaryDirectory . '/to';
+        $to = self::$temporaryDirectory . 'to';
 
         $filesystem->createDirectory($from);
 
@@ -817,7 +815,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
@@ -835,11 +833,11 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $target = self::$temporaryDirectory . '/target.txt';
+        $target = self::$temporaryDirectory . 'target.txt';
 
         self::assertFileDoesNotExist($target);
 
-        $link = self::$temporaryDirectory . '/link.txt';
+        $link = self::$temporaryDirectory . 'link.txt';
 
         self::assertFileDoesNotExist($link);
 
@@ -873,7 +871,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $file = self::$temporaryDirectory . '/file.txt';
+        $file = self::$temporaryDirectory . 'file.txt';
 
         $contents = 'Hello, world!';
 
