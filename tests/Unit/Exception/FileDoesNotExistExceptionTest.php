@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\Filesystem\Exception\FileDoesNotExistException;
+use Ghostwriter\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
+use Tests\Unit\AbstractTestCase;
 
 #[CoversClass(FileDoesNotExistException::class)]
-final class FileDoesNotExistExceptionTest extends TestCase
+#[CoversClass(Filesystem::class)]
+final class FileDoesNotExistExceptionTest extends AbstractTestCase
 {
     public function testExample(): void
     {
