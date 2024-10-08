@@ -25,7 +25,7 @@ final class FailedToAppendFileExceptionTest extends AbstractTestCase
 
         self::assertFileDoesNotExist($file);
 
-        $contents = 'Hello, world!';
+        $contents = '#BlackLivesMatter';
 
         $this->expectException(FailedToAppendFileException::class);
         $this->expectExceptionMessage($file);
