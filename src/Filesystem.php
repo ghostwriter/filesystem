@@ -11,6 +11,7 @@ use Ghostwriter\Filesystem\Exception\DirectoryAlreadyExistsException;
 use Ghostwriter\Filesystem\Exception\DirectoryDoesNotExistException;
 use Ghostwriter\Filesystem\Exception\ErrorException;
 use Ghostwriter\Filesystem\Exception\FailedToAppendFileException;
+use Ghostwriter\Filesystem\Exception\FailedToChangeDirectoryException;
 use Ghostwriter\Filesystem\Exception\FailedToChangePermissionsException;
 use Ghostwriter\Filesystem\Exception\FailedToCleanDirectoryException;
 use Ghostwriter\Filesystem\Exception\FailedToCopyFileException;
@@ -97,7 +98,7 @@ final class Filesystem implements FilesystemInterface
             if ($changed === false) {
                 throw new FailedToChangeDirectoryException($directory);
             }
-        });
+        }, FailedToChangeDirectoryException::class);
     }
 
     /**
