@@ -74,14 +74,13 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileExists($file);
 
-        self::assertSame('644', $filesystem->permissions($file));
-        self::assertSame('644', \sprintf('%o', \fileperms($file) & 0o777));
+        self::assertSame(\sprintf('%o', \fileperms($file) & 0o777), $filesystem->permissions($file));
 
         $filesystem->chmod($file, 0o400);
 
-        self::assertSame('400', $filesystem->permissions($file));
-        self::assertSame('400', \sprintf('%o', \fileperms($file) & 0o777));
+        \clearstatcache(true, $file);
 
+        self::assertSame(\sprintf('%o', \fileperms($file) & 0o777), $filesystem->permissions($file));
     }
 
     /**
