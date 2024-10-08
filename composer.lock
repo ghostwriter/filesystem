@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e90ef74100cb0209c17ab7ce791b966a",
+    "content-hash": "23deeefaba8229c15a85bb4c869ac5ca",
     "packages": [],
     "packages-dev": [
         {
@@ -651,12 +651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "0af5e52f8e7a53bc2be7f37d624253fdb1c1391b"
+                "reference": "e8227677bcef7208fe63c278ea4bac8d0e361c19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/0af5e52f8e7a53bc2be7f37d624253fdb1c1391b",
-                "reference": "0af5e52f8e7a53bc2be7f37d624253fdb1c1391b",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/e8227677bcef7208fe63c278ea4bac8d0e361c19",
+                "reference": "e8227677bcef7208fe63c278ea4bac8d0e361c19",
                 "shasum": ""
             },
             "require": {
@@ -665,7 +665,7 @@
                 "composer/composer": "^2.8.1",
                 "mockery/mockery": "^1.6.12",
                 "php": "^8.2",
-                "phpunit/phpunit": "^11.4.0"
+                "phpunit/phpunit": "^11.4.1"
             },
             "conflict": {
                 "vimeo/psalm": "<4.30"
@@ -722,7 +722,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-07T13:16:50+00:00"
+            "time": "2024-10-08T17:35:58+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -1484,16 +1484,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.4.0",
+            "version": "11.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "89fe0c530133c08f7fff89d3d727154e4e504925"
+                "reference": "7875627f15f4da7e7f0823d1f323f7295a77334e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/89fe0c530133c08f7fff89d3d727154e4e504925",
-                "reference": "89fe0c530133c08f7fff89d3d727154e4e504925",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7875627f15f4da7e7f0823d1f323f7295a77334e",
+                "reference": "7875627f15f4da7e7f0823d1f323f7295a77334e",
                 "shasum": ""
             },
             "require": {
@@ -1564,7 +1564,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.4.0"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.4.1"
             },
             "funding": [
                 {
@@ -1580,7 +1580,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-05T08:39:03+00:00"
+            "time": "2024-10-08T15:38:37+00:00"
         },
         {
             "name": "psr/container",
@@ -3924,89 +3924,6 @@
                 }
             ],
             "time": "2024-09-20T08:28:38+00:00"
-        },
-        {
-            "name": "symfony/var-dumper",
-            "version": "v7.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "e20e03889539fd4e4211e14d2179226c513c010d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/e20e03889539fd4e4211e14d2179226c513c010d",
-                "reference": "e20e03889539fd4e4211e14d2179226c513c010d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.2",
-                "symfony/polyfill-mbstring": "~1.0"
-            },
-            "conflict": {
-                "symfony/console": "<6.4"
-            },
-            "require-dev": {
-                "ext-iconv": "*",
-                "symfony/console": "^6.4|^7.0",
-                "symfony/http-kernel": "^6.4|^7.0",
-                "symfony/process": "^6.4|^7.0",
-                "symfony/uid": "^6.4|^7.0",
-                "twig/twig": "^3.0.4"
-            },
-            "bin": [
-                "Resources/bin/var-dump-server"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "Resources/functions/dump.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Component\\VarDumper\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Provides mechanisms for walking through any arbitrary PHP variable",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "debug",
-                "dump"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v7.1.5"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-09-16T10:07:02+00:00"
         },
         {
             "name": "theseer/tokenizer",
