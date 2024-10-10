@@ -692,6 +692,20 @@ final class Filesystem implements FilesystemInterface
      * @throws FilesystemExceptionInterface
      */
     #[Override]
+    public function regexIterator(string $directory, string $pattern): RegexIterator
+    {
+        return $this->safely(
+            static fn (FilesystemInterface $filesystem): RegexIterator => new RegexIterator(
+                $filesystem->recursiveIteratorIterator($filesystem->recursiveDirectoryIterator($directory)),
+                $pattern,
+            )
+        );
+    }
+
+    /**
+     * @throws FilesystemExceptionInterface
+     */
+    #[Override]
     public function relative(string $from, string $to): string
     {
         return $this->safely(static function () use ($from, $to): string {

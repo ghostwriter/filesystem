@@ -9,6 +9,7 @@
     <LessSpecificReturnType>
       <code><![CDATA[Generator]]></code>
       <code><![CDATA[RecursiveIteratorIterator]]></code>
+      <code><![CDATA[RegexIterator]]></code>
       <code><![CDATA[non-empty-string]]></code>
       <code><![CDATA[string]]></code>
     </LessSpecificReturnType>

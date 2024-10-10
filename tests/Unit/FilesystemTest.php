@@ -816,6 +816,21 @@ final class FilesystemTest extends AbstractTestCase
     /**
      * @throws Throwable
      */
+    public function testRegexIterator(): void
+    {
+        $filesystem = Filesystem::new();
+
+        $totalNumberOfTests = 40; // in the tests/Unit directory
+
+        self::assertCount(
+            $totalNumberOfTests,
+            \iterator_to_array($filesystem->regexIterator(__DIR__, '#\.php#iu')),
+        );
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function testRelative(): void
     {
         $filesystem = Filesystem::new();

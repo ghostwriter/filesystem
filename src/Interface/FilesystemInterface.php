@@ -117,6 +117,8 @@ interface FilesystemInterface
         int $mode = RegexIterator::GET_MATCH,
     ): RecursiveRegexIterator;
 
+    public function regexIterator(string $directory, string $pattern): RegexIterator;
+
     public function relative(string $from, string $to): string;
 
     public function size(string $path): int;
