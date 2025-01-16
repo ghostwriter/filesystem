@@ -11,6 +11,7 @@ use RecursiveIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
+use SplFileInfo;
 
 interface FilesystemInterface
 {
@@ -54,6 +55,8 @@ interface FilesystemInterface
         string $directory,
         int $flags = FilesystemIterator::SKIP_DOTS,
     ): FilesystemIterator;
+
+    public function glob(string $pattern, int $flags = 0): array;
 
     public function isDirectory(string $path): bool;
 
@@ -102,7 +105,7 @@ interface FilesystemInterface
     ): RecursiveDirectoryIterator;
 
     /**
-     * @return Generator<PathInterface>
+     * @return Generator<SplFileInfo>
      */
     public function recursiveIterator(string $directory): Generator;
 
