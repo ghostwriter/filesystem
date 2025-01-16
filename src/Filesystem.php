@@ -29,6 +29,7 @@ use Ghostwriter\Filesystem\Exception\FailedToDetermineFileSizeException;
 use Ghostwriter\Filesystem\Exception\FailedToDetermineRealPathException;
 use Ghostwriter\Filesystem\Exception\FailedToFileGetContentsException;
 use Ghostwriter\Filesystem\Exception\FailedToFilePutContentsException;
+use Ghostwriter\Filesystem\Exception\FailedToGlobException;
 use Ghostwriter\Filesystem\Exception\FailedToPrependFileException;
 use Ghostwriter\Filesystem\Exception\FailedToReadLinkException;
 use Ghostwriter\Filesystem\Exception\FailedToRenamePathException;
@@ -41,7 +42,6 @@ use Ghostwriter\Filesystem\Exception\ShouldNotHappenException;
 use Ghostwriter\Filesystem\Exception\SourceDoesNotExistException;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use Ghostwriter\Filesystem\Interface\FilesystemInterface;
-use Ghostwriter\Filesystem\Interface\PathInterface;
 use Override;
 use RecursiveDirectoryIterator;
 use RecursiveIterator;
@@ -52,8 +52,57 @@ use SplFileInfo;
 use Throwable;
 
 use const DIRECTORY_SEPARATOR;
+use const GLOB_ONLYDIR;
 use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
+
+use function array_merge;
+use function array_pad;
+use function array_reduce;
+use function array_shift;
+use function basename;
+use function chdir;
+use function chmod;
+use function clearstatcache;
+use function copy;
+use function count;
+use function dirname;
+use function explode;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function fileatime;
+use function filectime;
+use function filemtime;
+use function fileperms;
+use function filesize;
+use function getcwd;
+use function glob;
+use function implode;
+use function is_a;
+use function is_dir;
+use function is_executable;
+use function is_file;
+use function is_link;
+use function is_readable;
+use function is_writable;
+use function mb_rtrim;
+use function mb_trim;
+use function mkdir;
+use function pathinfo;
+use function readlink;
+use function realpath;
+use function rename;
+use function restore_error_handler;
+use function rmdir;
+use function set_error_handler;
+use function sprintf;
+use function str_replace;
+use function symlink;
+use function sys_get_temp_dir;
+use function tempnam;
+use function touch;
+use function unlink;
 
 final class Filesystem implements FilesystemInterface
 {
@@ -83,7 +132,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function basename(string $path, string $suffix = ''): string
     {
-        return $this->safely(static fn (): string => \basename($path, $suffix));
+        return $this->safely(static fn (): string => basename($path, $suffix));
     }
 
     /**
@@ -93,9 +142,9 @@ final class Filesystem implements FilesystemInterface
     public function chdir(string $directory): void
     {
         $this->safely(static function () use ($directory): void {
-            $changed = \chdir($directory);
+            $changed = chdir($directory);
 
-            if ($changed === false) {
+            if (false === $changed) {
                 throw new FailedToChangeDirectoryException($directory);
             }
         }, FailedToChangeDirectoryException::class);
@@ -108,9 +157,9 @@ final class Filesystem implements FilesystemInterface
     public function chmod(string $path, int $mode): void
     {
         $this->safely(static function () use ($path, $mode): void {
-            $changed = @\chmod($path, $mode);
+            $changed = @chmod($path, $mode);
 
-            if ($changed === false) {
+            if (false === $changed) {
                 throw new FailedToChangePermissionsException($path);
             }
         }, FailedToChangePermissionsException::class);
@@ -123,8 +172,8 @@ final class Filesystem implements FilesystemInterface
     public function cleanDirectory(string $directory): void
     {
         $this->safely(static function (FilesystemInterface $filesystem) use ($directory): void {
-            foreach ($filesystem->recursiveIterator($directory) as $path) {
-                $filesystem->delete($path->toString());
+            foreach ($filesystem->recursiveIterator($directory) as $path => $fileInfo) {
+                $filesystem->delete($path);
             }
         }, FailedToCleanDirectoryException::class);
     }
@@ -144,11 +193,11 @@ final class Filesystem implements FilesystemInterface
                 throw new DestinationAlreadyExistsException($destination);
             }
 
-            $copied = \copy($source, $destination);
+            $copied = copy($source, $destination);
 
-            if ($copied === false) {
+            if (false === $copied) {
                 throw new FailedToCopyFileException(
-                    \sprintf('Could not copy file: %s to %s', $source, $destination)
+                    sprintf('Could not copy file: %s to %s', $source, $destination)
                 );
             }
         }, FailedToCopyFileException::class);
@@ -165,9 +214,9 @@ final class Filesystem implements FilesystemInterface
                 throw new DirectoryAlreadyExistsException('Directory already exists: ' . $path);
             }
 
-            $created = \mkdir($path, $mode, $recursive);
+            $created = mkdir($path, $mode, $recursive);
 
-            if ($created === false && ! $filesystem->isDirectory($path)) {
+            if (false === $created && ! $filesystem->isDirectory($path)) {
                 throw new FailedToCreateDirectoryException('Could not create directory: ' . $path);
             }
         }, FailedToCreateDirectoryException::class);
@@ -183,7 +232,7 @@ final class Filesystem implements FilesystemInterface
             static function (FilesystemInterface $filesystem) use ($path, $contents): int {
                 $filesystem->touch($path);
 
-                if (\trim($contents) === '') {
+                if (mb_trim($contents) === '') {
                     return 0;
                 }
 
@@ -202,11 +251,11 @@ final class Filesystem implements FilesystemInterface
     public function createTemporaryDirectory(string $prefix = ''): string
     {
         return $this->safely(
-            /** @return non-empty-string **/
+            /** @return non-empty-string */
             static function (FilesystemInterface $filesystem) use ($prefix): string {
                 $temporaryDirectory = $filesystem->temporaryDirectory();
 
-                $temporaryDirectory = \sprintf('%s%s%s', $temporaryDirectory, DIRECTORY_SEPARATOR, $prefix);
+                $temporaryDirectory = sprintf('%s%s%s', $temporaryDirectory, DIRECTORY_SEPARATOR, $prefix);
 
                 if ($filesystem->missing($temporaryDirectory)) {
                     $filesystem->createDirectory($temporaryDirectory);
@@ -227,14 +276,14 @@ final class Filesystem implements FilesystemInterface
     public function createTemporaryFile(string $prefix = ''): string
     {
         return $this->safely(
-            /** @return non-empty-string **/
+            /** @return non-empty-string */
             static function (FilesystemInterface $filesystem) use ($prefix): string {
                 $temporaryDirectory = $filesystem->temporaryDirectory();
 
                 /** @var false|non-empty-string $temporaryFile */
-                $temporaryFile = \tempnam($temporaryDirectory, $prefix);
+                $temporaryFile = tempnam($temporaryDirectory, $prefix);
 
-                if ($temporaryFile === false) {
+                if (false === $temporaryFile) {
                     throw new FailedToCreateTemporaryFileException();
                 }
 
@@ -251,11 +300,11 @@ final class Filesystem implements FilesystemInterface
     public function currentWorkingDirectory(): string
     {
         return $this->safely(
-            /** @return non-empty-string **/
+            /** @return non-empty-string */
             static function (): string {
-                $workingDirectory = \getcwd();
+                $workingDirectory = getcwd();
 
-                if ($workingDirectory === false) {
+                if (false === $workingDirectory) {
                     throw new FailedToDetermineCurrentWorkingDirectoryException();
                 }
 
@@ -297,9 +346,9 @@ final class Filesystem implements FilesystemInterface
 
             $filesystem->cleanDirectory($path);
 
-            $deleted = \rmdir($path);
+            $deleted = rmdir($path);
 
-            if ($deleted === false) {
+            if (false === $deleted) {
                 throw new FailedToDeleteDirectoryException('Could not delete directory: ' . $path);
             }
         }, FailedToDeleteDirectoryException::class);
@@ -316,9 +365,9 @@ final class Filesystem implements FilesystemInterface
                 throw new FileDoesNotExistException($path);
             }
 
-            $deleted = \unlink($path);
+            $deleted = unlink($path);
 
-            if ($deleted === false) {
+            if (false === $deleted) {
                 throw new FailedToDeleteFileException($path);
             }
         }, FailedToDeleteFileException::class);
@@ -335,9 +384,9 @@ final class Filesystem implements FilesystemInterface
                 throw new LinkDoesNotExistException($path);
             }
 
-            $deleted = \unlink($path);
+            $deleted = unlink($path);
 
-            if ($deleted === false) {
+            if (false === $deleted) {
                 throw new FailedToDeleteLinkException($path);
             }
         }, FailedToDeleteLinkException::class);
@@ -349,7 +398,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function exists(string $path): bool
     {
-        return $this->safely(static fn (): bool => \file_exists($path));
+        return $this->safely(static fn (): bool => file_exists($path));
     }
 
     /**
@@ -358,7 +407,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function extension(string $path): string
     {
-        return $this->safely(static fn (): string => \pathinfo($path, PATHINFO_EXTENSION));
+        return $this->safely(static fn (): string => pathinfo($path, PATHINFO_EXTENSION));
     }
 
     /**
@@ -367,7 +416,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function filename(string $path): string
     {
-        return $this->safely(static fn (): string => \pathinfo($path, PATHINFO_FILENAME));
+        return $this->safely(static fn (): string => pathinfo($path, PATHINFO_FILENAME));
     }
 
     /**
@@ -383,11 +432,37 @@ final class Filesystem implements FilesystemInterface
 
     /**
      * @throws FilesystemExceptionInterface
+     *
+     * @return list<non-empty-string>
+     */
+    #[Override]
+    public function glob(string $pattern, int $flags = 0): array
+    {
+        return $this->safely(
+            /**
+             * @return list<non-empty-string>
+             */
+            static function () use ($pattern, $flags): array {
+                /** @var false|list<non-empty-string> $result */
+                $result = glob($pattern, $flags);
+
+                if (false === $result) {
+                    throw new FailedToGlobException($pattern);
+                }
+
+                return $result;
+            },
+            FailedToGlobException::class
+        );
+    }
+
+    /**
+     * @throws FilesystemExceptionInterface
      */
     #[Override]
     public function isDirectory(string $path): bool
     {
-        return $this->safely(static fn (): bool => \is_dir($path));
+        return $this->safely(static fn (): bool => is_dir($path));
     }
 
     /**
@@ -396,7 +471,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function isExecutable(string $path): bool
     {
-        return $this->safely(static fn (): bool => \is_executable($path));
+        return $this->safely(static fn (): bool => is_executable($path));
     }
 
     /**
@@ -405,7 +480,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function isFile(string $path): bool
     {
-        return $this->safely(static fn (): bool => \is_file($path));
+        return $this->safely(static fn (): bool => is_file($path));
     }
 
     /**
@@ -414,7 +489,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function isLink(string $path): bool
     {
-        return $this->safely(static fn (): bool => \is_link($path));
+        return $this->safely(static fn (): bool => is_link($path));
     }
 
     /**
@@ -423,7 +498,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function isReadable(string $path): bool
     {
-        return $this->safely(static fn (): bool => \is_readable($path));
+        return $this->safely(static fn (): bool => is_readable($path));
     }
 
     /**
@@ -432,7 +507,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function isWritable(string $path): bool
     {
-        return $this->safely(static fn (): bool => \is_writable($path));
+        return $this->safely(static fn (): bool => is_writable($path));
     }
 
     /**
@@ -441,7 +516,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function lastAccessTime(string $path): int
     {
-        return $this->safely(static fn (): int => \fileatime($path));
+        return $this->safely(static fn (): int => fileatime($path));
     }
 
     /**
@@ -450,7 +525,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function lastChangeTime(string $path): int
     {
-        return $this->safely(static fn (): int => \filectime($path));
+        return $this->safely(static fn (): int => filectime($path));
     }
 
     /**
@@ -459,7 +534,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function lastModifiedTime(string $path): int
     {
-        return $this->safely(static fn (): int => \filemtime($path));
+        return $this->safely(static fn (): int => filemtime($path));
     }
 
     /**
@@ -470,9 +545,9 @@ final class Filesystem implements FilesystemInterface
     {
         return $this->safely(
             static function () use ($path): string {
-                $target = \readlink($path);
+                $target = readlink($path);
 
-                if ($target === false) {
+                if (false === $target) {
                     throw new FailedToReadLinkException($path);
                 }
 
@@ -497,7 +572,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function missing(string $path): bool
     {
-        return $this->safely(static fn (): bool => ! \file_exists($path));
+        return $this->safely(static fn (): bool => ! file_exists($path));
     }
 
     /**
@@ -515,10 +590,10 @@ final class Filesystem implements FilesystemInterface
                 throw new ShouldNotHappenException('Destination file already exists: ' . $destination);
             }
 
-            $moved = \rename($source, $destination);
+            $moved = rename($source, $destination);
 
-            if ($moved === false) {
-                throw new FailedToRenamePathException(\sprintf('Could not move file: %s to %s', $source, $destination));
+            if (false === $moved) {
+                throw new FailedToRenamePathException(sprintf('Could not move file: %s to %s', $source, $destination));
             }
         }, FailedToRenamePathException::class);
     }
@@ -531,7 +606,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function parentDirectory(string $path, int $levels = 1): string
     {
-        return $this->safely(static fn (): string => \dirname($path, $levels));
+        return $this->safely(static fn (): string => dirname($path, $levels));
     }
 
     #[Override]
@@ -550,17 +625,17 @@ final class Filesystem implements FilesystemInterface
     public function permissions(string $path): string
     {
         return $this->safely(
-            /** @return non-empty-string **/
+            /** @return non-empty-string */
             static function () use ($path): string {
-                \clearstatcache(true, $path);
+                clearstatcache(true, $path);
 
-                $permissions = \fileperms($path);
+                $permissions = fileperms($path);
 
-                if ($permissions === false) {
+                if (false === $permissions) {
                     throw new ShouldNotHappenException('Could not determine permissions for: ' . $path);
                 }
 
-                return \sprintf('%o', $permissions & 0o777);
+                return sprintf('%o', $permissions & 0o777);
             }
         );
     }
@@ -594,8 +669,8 @@ final class Filesystem implements FilesystemInterface
                 throw new FileIsNotReadableException($path);
             }
 
-            $contents = \file_get_contents($path);
-            if ($contents === false) {
+            $contents = file_get_contents($path);
+            if (false === $contents) {
                 throw new FailedToFileGetContentsException($path);
             }
 
@@ -610,9 +685,9 @@ final class Filesystem implements FilesystemInterface
     public function realpath(string $path): string
     {
         return $this->safely(static function () use ($path): string {
-            $target = \realpath($path);
+            $target = realpath($path);
 
-            if ($target === false) {
+            if (false === $target) {
                 throw new FailedToDetermineRealPathException($path);
             }
 
@@ -636,33 +711,22 @@ final class Filesystem implements FilesystemInterface
     /**
      * @throws FilesystemExceptionInterface
      *
-     * @return Generator<non-empty-string,PathInterface>
+     * @return Generator<non-empty-string,SplFileInfo>
      */
     #[Override]
     public function recursiveIterator(string $directory): Generator
     {
         yield from $this->safely(
-            static function (FilesystemInterface $filesystem) use ($directory): Generator {
-                foreach (
-                    $filesystem->recursiveIteratorIterator(
-                        $filesystem->recursiveDirectoryIterator($directory)
-                    ) as $path
-                ) {
-                    if (! $path instanceof SplFileInfo) {
-                        continue;
-                    }
-
-                    /** @var non-empty-string $name */
-                    $name = $path->getPathname();
-
-                    yield $name => Path::new($name);
-                }
-            }
+            static fn (FilesystemInterface $filesystem): RecursiveIteratorIterator => $filesystem->recursiveIteratorIterator(
+                $filesystem->recursiveDirectoryIterator($directory)
+            )
         );
     }
 
     /**
      * @throws FilesystemExceptionInterface
+     *
+     * @return RecursiveIteratorIterator<RecursiveIterator>
      */
     #[Override]
     public function recursiveIteratorIterator(
@@ -710,38 +774,40 @@ final class Filesystem implements FilesystemInterface
     {
         return $this->safely(static function () use ($from, $to): string {
             // some compatibility fixes for Windows paths
-            $from = \is_dir($from) ? \rtrim($from, '\/') . '/' : $from;
-            $to = \is_dir($to) ? \rtrim($to, '\/') . '/' : $to;
+            $from = is_dir($from) ? mb_rtrim($from, '\/') . '/' : $from;
+            $to = is_dir($to) ? mb_rtrim($to, '\/') . '/' : $to;
 
-            $from = \str_replace('\\', '/', $from);
-            $to = \str_replace('\\', '/', $to);
+            $from = str_replace('\\', '/', $from);
+            $to = str_replace('\\', '/', $to);
 
-            $from = \explode('/', $from);
-            $to = \explode('/', $to);
+            $from = explode('/', $from);
+            $to = explode('/', $to);
             $relPath = $to;
 
             foreach ($from as $depth => $dir) {
                 // find first non-matching dir
                 if ($dir === $to[$depth]) {
                     // ignore this directory
-                    \array_shift($relPath);
+                    array_shift($relPath);
+
                     continue;
                 }
 
                 // get number of remaining dirs to $from
-                $remaining = \count($from) - $depth;
+                $remaining = count($from) - $depth;
 
-                if ($remaining > 1) {
+                if (1 < $remaining) {
                     // add traversals up to first matching dir
-                    $padLength = (\count($relPath) + $remaining - 1) * -1;
-                    $relPath = \array_pad($relPath, $padLength, '..');
+                    $padLength = (count($relPath) + $remaining - 1) * -1;
+                    $relPath = array_pad($relPath, $padLength, '..');
+
                     break;
                 }
 
                 $relPath[0] = './' . $relPath[0];
             }
 
-            return \implode('/', $relPath);
+            return implode('/', $relPath);
         });
     }
 
@@ -752,9 +818,9 @@ final class Filesystem implements FilesystemInterface
     public function size(string $path): int
     {
         return $this->safely(static function () use ($path): int {
-            $size = \filesize($path);
+            $size = filesize($path);
 
-            if ($size === false) {
+            if (false === $size) {
                 throw new FailedToDetermineFileSizeException($path);
             }
 
@@ -769,9 +835,9 @@ final class Filesystem implements FilesystemInterface
     public function symlink(string $target, string $link): void
     {
         $this->safely(static function () use ($target, $link): void {
-            $symlinked = \symlink($target, $link);
+            $symlinked = symlink($target, $link);
 
-            if ($symlinked === false) {
+            if (false === $symlinked) {
                 throw new FailedToCreateLinkException($link);
             }
         }, FailedToCreateLinkException::class);
@@ -783,7 +849,7 @@ final class Filesystem implements FilesystemInterface
     #[Override]
     public function temporaryDirectory(): string
     {
-        return $this->safely(static fn (): string => \sys_get_temp_dir());
+        return $this->safely(static fn (): string => sys_get_temp_dir());
     }
 
     /**
@@ -807,9 +873,9 @@ final class Filesystem implements FilesystemInterface
                 $filesystem->createDirectory($parentDirectory);
             }
 
-            $touched = \touch($path);
+            $touched = touch($path);
 
-            if ($touched === false) {
+            if (false === $touched) {
                 throw new FailedToCreateFileException($path);
             }
         }, FailedToCreateFileException::class);
@@ -830,14 +896,45 @@ final class Filesystem implements FilesystemInterface
                 throw new FileIsNotWritableException($path);
             }
 
-            $bytesWritten = \file_put_contents($path, $contents);
+            $bytesWritten = file_put_contents($path, $contents);
 
-            if ($bytesWritten === false) {
+            if (false === $bytesWritten) {
                 throw new FailedToFilePutContentsException($path);
             }
 
             return $bytesWritten;
         }, FailedToFilePutContentsException::class);
+    }
+
+    /**
+     * @param non-empty-string $pattern
+     *
+     * @throws FilesystemExceptionInterface
+     *
+     * @return list<non-empty-string>
+     */
+    private function findPhpFilesUsingGlob(string $pattern): array
+    {
+        /**
+         * @var list<non-empty-string>
+         */
+        return array_reduce(
+            /**
+             * Recursively search in subdirectories.
+             */
+            $this->glob($pattern . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR),
+            fn (array $carry, string $subDirectory): array
+            /**
+             * Merge the results from subdirectories.
+             *
+             * @var non-empty-string $subDirectory
+             */
+            => array_merge($carry, $this->findPhpFilesUsingGlob($subDirectory)),
+            /**
+             * Search for php files in the current directory.
+             */
+            $this->glob($pattern . DIRECTORY_SEPARATOR . '*.php'),
+        );
     }
 
     /**
@@ -851,14 +948,14 @@ final class Filesystem implements FilesystemInterface
      */
     private function safely(Closure $function, string $class = ShouldNotHappenException::class): mixed
     {
-        if (! \is_a($class, FilesystemExceptionInterface::class, true)) {
+        if (! is_a($class, FilesystemExceptionInterface::class, true)) {
             throw new ShouldNotHappenException(
-                \sprintf('Class "%s" MUST implement "%s".', $class, FilesystemExceptionInterface::class)
+                sprintf('Class "%s" MUST implement "%s".', $class, FilesystemExceptionInterface::class)
             );
         }
 
         try {
-            \set_error_handler(static function (int $severity, string $message, string $file, int $line): never {
+            set_error_handler(static function (int $severity, string $message, string $file, int $line): never {
                 throw new ErrorException($message, $severity, $severity, $file, $line);
             });
 
@@ -867,7 +964,7 @@ final class Filesystem implements FilesystemInterface
         } catch (Throwable $throwable) {
             throw new $class($throwable->getMessage(), $throwable->getCode(), $throwable);
         } finally {
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
 }
