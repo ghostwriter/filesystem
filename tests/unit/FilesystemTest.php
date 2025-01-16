@@ -5,16 +5,22 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Ghostwriter\Filesystem\Filesystem;
-use Ghostwriter\Filesystem\Interface\PathInterface;
-use Ghostwriter\Filesystem\Path;
 use PHPUnit\Framework\Attributes\CoversClass;
 use SplFileInfo;
 use Throwable;
 
 use const DIRECTORY_SEPARATOR;
 
+use function clearstatcache;
+use function fileperms;
+use function getcwd;
+use function iterator_to_array;
+use function mb_strlen;
+use function sprintf;
+use function sys_get_temp_dir;
+use function time;
+
 #[CoversClass(Filesystem::class)]
-#[CoversClass(Path::class)]
 final class FilesystemTest extends AbstractTestCase
 {
     /**
@@ -38,7 +44,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $bytes = $filesystem->append($file, $suffix);
 
-        self::assertSame(\mb_strlen($contents), $bytes);
+        self::assertSame(mb_strlen($contents), $bytes);
 
         self::assertStringEqualsFile($file, $contents);
 
@@ -96,13 +102,13 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileExists($file);
 
-        self::assertSame(\sprintf('%o', \fileperms($file) & 0o777), $filesystem->permissions($file));
+        self::assertSame(sprintf('%o', fileperms($file) & 0o777), $filesystem->permissions($file));
 
         $filesystem->chmod($file, 0o400);
 
-        \clearstatcache(true, $file);
+        clearstatcache(true, $file);
 
-        self::assertSame(\sprintf('%o', \fileperms($file) & 0o777), $filesystem->permissions($file));
+        self::assertSame(sprintf('%o', fileperms($file) & 0o777), $filesystem->permissions($file));
     }
 
     /**
@@ -126,7 +132,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertDirectoryExists($directory);
 
-        self::assertEmpty(\iterator_to_array($filesystem->filesystemIterator($directory)));
+        self::assertEmpty(iterator_to_array($filesystem->filesystemIterator($directory)));
     }
 
     /**
@@ -220,7 +226,7 @@ final class FilesystemTest extends AbstractTestCase
      */
     public function testCurrentWorkingDirectory(): void
     {
-        self::assertSame(\getcwd(), Filesystem::new()->currentWorkingDirectory());
+        self::assertSame(getcwd(), Filesystem::new()->currentWorkingDirectory());
     }
 
     /**
@@ -507,7 +513,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileExists($file);
 
-        self::assertLessThanOrEqual(\time(), $filesystem->lastAccessTime($file));
+        self::assertLessThanOrEqual(time(), $filesystem->lastAccessTime($file));
     }
 
     /**
@@ -525,7 +531,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileExists($file);
 
-        self::assertLessThanOrEqual(\time(), $filesystem->lastChangeTime($file));
+        self::assertLessThanOrEqual(time(), $filesystem->lastChangeTime($file));
     }
 
     /**
@@ -543,7 +549,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertFileExists($file);
 
-        self::assertLessThanOrEqual(\time(), $filesystem->lastModifiedTime($file));
+        self::assertLessThanOrEqual(time(), $filesystem->lastModifiedTime($file));
     }
 
     /**
@@ -596,6 +602,7 @@ final class FilesystemTest extends AbstractTestCase
         foreach ($filesystem->listDirectory($directory) as $file) {
             self::assertInstanceOf(SplFileInfo::class, $file);
             self::assertSame($expected, $file->getPathname());
+
             return;
         }
 
@@ -689,7 +696,7 @@ final class FilesystemTest extends AbstractTestCase
 
         $bytes = $filesystem->prepend($file, $prefix);
 
-        self::assertSame(\mb_strlen($contents), $bytes);
+        self::assertSame(mb_strlen($contents), $bytes);
 
         self::assertStringEqualsFile($file, $contents);
 
@@ -751,6 +758,7 @@ final class FilesystemTest extends AbstractTestCase
             self::assertInstanceOf(SplFileInfo::class, $fileInfo);
 
             self::assertSame($file, $fileInfo->getPathname());
+
             return;
         }
 
@@ -773,9 +781,8 @@ final class FilesystemTest extends AbstractTestCase
         $filesystem->write($expected, $contents);
 
         foreach ($filesystem->recursiveIterator($directory) as $file) {
-            self::assertInstanceOf(PathInterface::class, $file);
-            self::assertInstanceOf(Path::class, $file);
-            self::assertSame($expected, $file->toString());
+            self::assertInstanceOf(SplFileInfo::class, $file);
+            self::assertSame($expected, $file->getPathname());
 
             return;
         }
@@ -824,7 +831,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertCount(
             $totalNumberOfTests,
-            \iterator_to_array($filesystem->regexIterator(__DIR__, '#\.php#iu')),
+            iterator_to_array($filesystem->regexIterator(__DIR__, '#\.php#iu')),
         );
     }
 
@@ -861,7 +868,7 @@ final class FilesystemTest extends AbstractTestCase
 
         self::assertStringEqualsFile($file, $contents);
 
-        self::assertSame(\mb_strlen($contents), $filesystem->size($file));
+        self::assertSame(mb_strlen($contents), $filesystem->size($file));
     }
 
     /**
@@ -899,7 +906,7 @@ final class FilesystemTest extends AbstractTestCase
      */
     public function testTemporaryDirectory(): void
     {
-        self::assertSame(Filesystem::new()->temporaryDirectory(), \sys_get_temp_dir());
+        self::assertSame(Filesystem::new()->temporaryDirectory(), sys_get_temp_dir());
     }
 
     /**
