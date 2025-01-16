@@ -7,6 +7,4 @@ namespace Ghostwriter\Filesystem\Exception;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use RuntimeException;
 
-final class FailedToDeleteLinkException extends RuntimeException implements FilesystemExceptionInterface
-{
-}
+final class FailedToDeleteLinkException extends RuntimeException implements FilesystemExceptionInterface {}
