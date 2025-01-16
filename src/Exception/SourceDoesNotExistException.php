@@ -7,6 +7,4 @@ namespace Ghostwriter\Filesystem\Exception;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use InvalidArgumentException;
 
-final class SourceDoesNotExistException extends InvalidArgumentException implements FilesystemExceptionInterface
-{
-}
+final class SourceDoesNotExistException extends InvalidArgumentException implements FilesystemExceptionInterface {}
