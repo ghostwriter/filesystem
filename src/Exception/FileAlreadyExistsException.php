@@ -7,6 +7,4 @@ namespace Ghostwriter\Filesystem\Exception;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use InvalidArgumentException;
 
-final class FileAlreadyExistsException extends InvalidArgumentException implements FilesystemExceptionInterface
-{
-}
+final class FileAlreadyExistsException extends InvalidArgumentException implements FilesystemExceptionInterface {}
