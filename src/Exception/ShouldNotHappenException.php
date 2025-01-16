@@ -7,6 +7,4 @@ namespace Ghostwriter\Filesystem\Exception;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use LogicException;
 
-final class ShouldNotHappenException extends LogicException implements FilesystemExceptionInterface
-{
-}
+final class ShouldNotHappenException extends LogicException implements FilesystemExceptionInterface {}
