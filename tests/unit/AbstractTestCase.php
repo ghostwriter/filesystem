@@ -5,14 +5,23 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Ghostwriter\Filesystem\Filesystem;
+use Ghostwriter\Filesystem\Interface\FilesystemInterface;
 use Override;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
 use const DIRECTORY_SEPARATOR;
 
+use function array_key_exists;
+use function dirname;
+use function implode;
+use function mb_strrchr;
+use function mb_substr;
+
 abstract class AbstractTestCase extends TestCase
 {
+    public readonly FilesystemInterface $filesystem;
+
     protected static string $temporaryDirectory;
 
     /**
@@ -21,11 +30,11 @@ abstract class AbstractTestCase extends TestCase
     #[Override]
     protected function setUp(): void
     {
+        $this->filesystem = Filesystem::new();
+
+        self::$temporaryDirectory = $this->temporaryDirectory();
+
         parent::setUp();
-
-        self::$temporaryDirectory = self::temporaryDirectory();
-
-        self::assertDirectoryExists(self::$temporaryDirectory);
     }
 
     /**
@@ -34,7 +43,9 @@ abstract class AbstractTestCase extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Filesystem::new()->delete(self::$temporaryDirectory);
+        if ($this->filesystem->isDirectory(self::$temporaryDirectory)) {
+            $this->filesystem->deleteDirectory(self::$temporaryDirectory);
+        }
 
         self::assertDirectoryDoesNotExist(self::$temporaryDirectory);
 
@@ -44,21 +55,23 @@ abstract class AbstractTestCase extends TestCase
     /**
      * @throws Throwable
      */
-    public static function temporaryDirectory(): string
+    public function temporaryDirectory(): string
     {
-        $path = \sprintf(
-            '%s%sFixture%s%s%s',
-            \dirname(__DIR__),
-            DIRECTORY_SEPARATOR,
-            DIRECTORY_SEPARATOR,
-            \mb_substr(\mb_strrchr(static::class, '\\'), 1),
-            DIRECTORY_SEPARATOR
-        );
+        static $directories = [];
 
-        if (! \is_dir($path)) {
-            Filesystem::new()->createDirectory($path);
+        $name = mb_substr(mb_strrchr(static::class, '\\'), 1);
+        if (array_key_exists($name, $directories)) {
+            return $directories[$name];
         }
 
-        return $path;
+        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'fixture', $name, '']);
+
+        if (! $this->filesystem->isDirectory($path)) {
+            $this->filesystem->createDirectory($path);
+        }
+
+        self::assertDirectoryExists($path);
+
+        return $directories[$name] = $path;
     }
 }
