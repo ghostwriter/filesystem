@@ -1,8 +1,8 @@
 # Filesystem
 
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/filesystem&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
 [![Automation](https://github.com/ghostwriter/filesystem/actions/workflows/automation.yml/badge.svg)](https://github.com/ghostwriter/filesystem/actions/workflows/automation.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/filesystem?color=8892bf)](https://www.php.net/supported-versions)
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/filesystem&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
 [![Downloads](https://badgen.net/packagist/dt/ghostwriter/filesystem?color=blue)](https://packagist.org/packages/ghostwriter/filesystem)
 
 Filesystem implementation for PHP
