@@ -60,11 +60,12 @@ abstract class AbstractTestCase extends TestCase
         static $directories = [];
 
         $name = mb_substr(mb_strrchr(static::class, '\\'), 1);
+
         if (array_key_exists($name, $directories)) {
             return $directories[$name];
         }
 
-        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'fixture', $name, '']);
+        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'fixture', $name]) . DIRECTORY_SEPARATOR;
 
         if (! $this->filesystem->isDirectory($path)) {
             $this->filesystem->createDirectory($path);
