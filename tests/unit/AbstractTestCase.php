@@ -34,6 +34,8 @@ abstract class AbstractTestCase extends TestCase
 
         self::$temporaryDirectory = $this->temporaryDirectory();
 
+        $this->filesystem->chmod(self::$temporaryDirectory, 0o777);
+
         parent::setUp();
     }
 
