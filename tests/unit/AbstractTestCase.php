@@ -34,6 +34,10 @@ abstract class AbstractTestCase extends TestCase
 
         self::$temporaryDirectory = $this->temporaryDirectory();
 
+        if ($this->filesystem->missing(self::$temporaryDirectory)) {
+            $this->filesystem->createDirectory(self::$temporaryDirectory);
+        }
+
         $this->filesystem->chmod(self::$temporaryDirectory, 0o777);
 
         parent::setUp();
@@ -67,14 +71,6 @@ abstract class AbstractTestCase extends TestCase
             return $directories[$name];
         }
 
-        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'fixture', $name]) . DIRECTORY_SEPARATOR;
-
-        if (! $this->filesystem->isDirectory($path)) {
-            $this->filesystem->createDirectory($path);
-        }
-
-        self::assertDirectoryExists($path);
-
-        return $directories[$name] = $path;
+        return $directories[$name] = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'fixture', $name]) . DIRECTORY_SEPARATOR;
     }
 }
