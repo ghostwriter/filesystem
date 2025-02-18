@@ -365,7 +365,7 @@ final class Filesystem implements FilesystemInterface
                 throw new FileDoesNotExistException($path);
             }
 
-            $deleted = unlink($path);
+            $deleted = unlink($filesystem->realpath($path));
 
             if (false === $deleted) {
                 throw new FailedToDeleteFileException($path);
