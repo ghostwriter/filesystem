@@ -14,6 +14,7 @@ use const DIRECTORY_SEPARATOR;
 
 use function array_key_exists;
 use function dirname;
+use function getenv;
 use function implode;
 use function mb_strrchr;
 use function mb_substr;
@@ -73,7 +74,12 @@ abstract class AbstractTestCase extends TestCase
 
         return $directories[$name] = implode(
             DIRECTORY_SEPARATOR,
-            [dirname(__DIR__), 'Fixture', $name]
+            [$this->storage(), 'Fixture', $name]
         ) . DIRECTORY_SEPARATOR;
+    }
+
+    private function storage(): string
+    {
+        return getenv('RUNNER_TEMP') ?: dirname(__DIR__);
     }
 }
