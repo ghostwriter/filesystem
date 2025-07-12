@@ -13,11 +13,12 @@ use Throwable;
 use const DIRECTORY_SEPARATOR;
 
 use function array_key_exists;
-use function dirname;
 use function getenv;
 use function implode;
 use function mb_strrchr;
 use function mb_substr;
+use function realpath;
+use function sys_get_temp_dir;
 
 abstract class AbstractTestCase extends TestCase
 {
@@ -59,27 +60,20 @@ abstract class AbstractTestCase extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @throws Throwable
-     */
-    public function temporaryDirectory(): string
+    private function temporaryDirectory(): string
     {
         static $directories = [];
 
         $name = mb_substr(mb_strrchr(static::class, '\\'), 1);
 
-        if (array_key_exists($name, $directories)) {
-            return $directories[$name];
-        }
-
-        return $directories[$name] = implode(
-            DIRECTORY_SEPARATOR,
-            [$this->storage(), 'Fixture', $name]
-        ) . DIRECTORY_SEPARATOR;
+        return $directories[$name] ??=
+            implode(DIRECTORY_SEPARATOR, [$this->storage(), $name]) . DIRECTORY_SEPARATOR;
     }
 
     private function storage(): string
     {
-        return getenv('RUNNER_TEMP') ?: dirname(__DIR__);
+        static $storage = null;
+
+        return $storage ??= realpath(getenv('RUNNER_TEMP') ?: sys_get_temp_dir());
     }
 }
