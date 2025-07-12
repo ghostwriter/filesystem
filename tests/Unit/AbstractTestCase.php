@@ -71,6 +71,9 @@ abstract class AbstractTestCase extends TestCase
             return $directories[$name];
         }
 
-        return $directories[$name] = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'fixture', $name]) . DIRECTORY_SEPARATOR;
+        return $directories[$name] = implode(
+            DIRECTORY_SEPARATOR,
+            [dirname(__DIR__), 'Fixture', $name]
+        ) . DIRECTORY_SEPARATOR;
     }
 }
