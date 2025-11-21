@@ -84,9 +84,7 @@ interface FilesystemInterface
 
     public function move(string $source, string $destination): void;
 
-    /**
-     * @param int<1,max> $levels
-     */
+    /** @param int<1,max> $levels */
     public function parentDirectory(string $path, int $levels = 1): string;
 
     public function pathname(string $path): string;
@@ -104,9 +102,7 @@ interface FilesystemInterface
         int $mode = FilesystemIterator::SKIP_DOTS,
     ): RecursiveDirectoryIterator;
 
-    /**
-     * @return Generator<SplFileInfo>
-     */
+    /** @return Generator<SplFileInfo> */
     public function recursiveIterator(string $directory): Generator;
 
     public function recursiveIteratorIterator(

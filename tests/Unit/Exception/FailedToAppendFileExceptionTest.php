@@ -14,9 +14,7 @@ use Throwable;
 #[CoversClass(Filesystem::class)]
 final class FailedToAppendFileExceptionTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testAppend(): void
     {
         $filesystem = Filesystem::new();

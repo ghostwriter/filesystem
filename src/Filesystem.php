@@ -111,9 +111,7 @@ final class Filesystem implements FilesystemInterface
         return new self();
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function append(string $path, string $contents): int
     {
@@ -126,18 +124,14 @@ final class Filesystem implements FilesystemInterface
 
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function basename(string $path, string $suffix = ''): string
     {
         return $this->safely(static fn (): string => basename($path, $suffix));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function chdir(string $directory): void
     {
@@ -150,9 +144,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToChangeDirectoryException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function chmod(string $path, int $mode): void
     {
@@ -165,9 +157,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToChangePermissionsException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function cleanDirectory(string $directory): void
     {
@@ -178,9 +168,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToCleanDirectoryException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function copy(string $source, string $destination): void
     {
@@ -203,9 +191,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToCopyFileException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function createDirectory(string $path, int $mode = 0o777, bool $recursive = true): void
     {
@@ -222,9 +208,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToCreateDirectoryException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function createFile(string $path, string $contents = ''): int
     {
@@ -293,9 +277,7 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function currentWorkingDirectory(): string
     {
@@ -314,9 +296,7 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function delete(string $path): void
     {
@@ -333,9 +313,7 @@ final class Filesystem implements FilesystemInterface
         $this->chdir($currentWorkingDirectory);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function deleteDirectory(string $path): void
     {
@@ -354,9 +332,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToDeleteDirectoryException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function deleteFile(string $path): void
     {
@@ -373,9 +349,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToDeleteFileException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function deleteLink(string $path): void
     {
@@ -392,36 +366,28 @@ final class Filesystem implements FilesystemInterface
         }, FailedToDeleteLinkException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function exists(string $path): bool
     {
         return $this->safely(static fn (): bool => file_exists($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function extension(string $path): string
     {
         return $this->safely(static fn (): string => pathinfo($path, PATHINFO_EXTENSION));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function filename(string $path): string
     {
         return $this->safely(static fn (): string => pathinfo($path, PATHINFO_FILENAME));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function filesystemIterator(
         string $directory,
@@ -456,90 +422,70 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function isDirectory(string $path): bool
     {
         return $this->safely(static fn (): bool => is_dir($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function isExecutable(string $path): bool
     {
         return $this->safely(static fn (): bool => is_executable($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function isFile(string $path): bool
     {
         return $this->safely(static fn (): bool => is_file($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function isLink(string $path): bool
     {
         return $this->safely(static fn (): bool => is_link($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function isReadable(string $path): bool
     {
         return $this->safely(static fn (): bool => is_readable($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function isWritable(string $path): bool
     {
         return $this->safely(static fn (): bool => is_writable($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function lastAccessTime(string $path): int
     {
         return $this->safely(static fn (): int => fileatime($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function lastChangeTime(string $path): int
     {
         return $this->safely(static fn (): int => filectime($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function lastModifiedTime(string $path): int
     {
         return $this->safely(static fn (): int => filemtime($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function linkTarget(string $path): string
     {
@@ -557,27 +503,21 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function listDirectory(string $path): Generator
     {
         yield from $this->filesystemIterator($path);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function missing(string $path): bool
     {
         return $this->safely(static fn (): bool => ! file_exists($path));
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function move(string $source, string $destination): void
     {
@@ -640,9 +580,7 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function prepend(string $path, string $contents): int
     {
@@ -654,9 +592,7 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function read(string $path): string
     {
@@ -678,9 +614,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToFileGetContentsException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function realpath(string $path): string
     {
@@ -695,9 +629,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToDetermineRealPathException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function recursiveDirectoryIterator(
         string $directory,
@@ -738,9 +670,7 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function recursiveRegexIterator(
         RecursiveIterator $iterator,
@@ -752,9 +682,7 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function regexIterator(string $directory, string $pattern): RegexIterator
     {
@@ -766,9 +694,7 @@ final class Filesystem implements FilesystemInterface
         );
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function relative(string $from, string $to): string
     {
@@ -811,9 +737,7 @@ final class Filesystem implements FilesystemInterface
         });
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function size(string $path): int
     {
@@ -828,9 +752,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToDetermineFileSizeException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function symlink(string $target, string $link): void
     {
@@ -843,18 +765,14 @@ final class Filesystem implements FilesystemInterface
         }, FailedToCreateLinkException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function temporaryDirectory(): string
     {
         return $this->safely(static fn (): string => sys_get_temp_dir());
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function touch(string $path): void
     {
@@ -881,9 +799,7 @@ final class Filesystem implements FilesystemInterface
         }, FailedToCreateFileException::class);
     }
 
-    /**
-     * @throws FilesystemExceptionInterface
-     */
+    /** @throws FilesystemExceptionInterface */
     #[Override]
     public function write(string $path, string $contents): int
     {

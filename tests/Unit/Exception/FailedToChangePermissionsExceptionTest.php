@@ -15,9 +15,7 @@ use Throwable;
 #[CoversClass(Filesystem::class)]
 final class FailedToChangePermissionsExceptionTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     #[DataProvider('provideChmodCases')]
     public function testChmod(string $path): void
     {
@@ -27,9 +25,7 @@ final class FailedToChangePermissionsExceptionTest extends AbstractTestCase
         Filesystem::new()->chmod($path, 0o644);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public static function provideChmodCases(): iterable
     {
         yield from [
