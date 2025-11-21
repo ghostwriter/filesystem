@@ -747,7 +747,7 @@ final class FilesystemTest extends AbstractTestCase
     {
         $filesystem = Filesystem::new();
 
-        $totalNumberOfTests = 40; // in the tests/Unit directory
+        $totalNumberOfTests = 41; // in the tests/Unit directory
 
         self::assertCount(
             $totalNumberOfTests,
