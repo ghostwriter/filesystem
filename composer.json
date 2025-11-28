@@ -85,8 +85,8 @@
             }
         },
         "thanks": {
-            "url": "https://github.com/ghostwriter/filesystem",
-            "name": "ghostwriter/filesystem"
+            "name": "ghostwriter/filesystem",
+            "url": "https://github.com/ghostwriter/filesystem"
         }
     },
     "scripts": {
