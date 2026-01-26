@@ -11,6 +11,7 @@ use RecursiveIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
+use SplFileInfo;
 
 interface FilesystemInterface
 {
@@ -55,6 +56,8 @@ interface FilesystemInterface
         int $flags = FilesystemIterator::SKIP_DOTS,
     ): FilesystemIterator;
 
+    public function glob(string $pattern, int $flags = 0): array;
+
     public function isDirectory(string $path): bool;
 
     public function isExecutable(string $path): bool;
@@ -81,9 +84,7 @@ interface FilesystemInterface
 
     public function move(string $source, string $destination): void;
 
-    /**
-     * @param int<1,max> $levels
-     */
+    /** @param int<1,max> $levels */
     public function parentDirectory(string $path, int $levels = 1): string;
 
     public function pathname(string $path): string;
@@ -101,9 +102,7 @@ interface FilesystemInterface
         int $mode = FilesystemIterator::SKIP_DOTS,
     ): RecursiveDirectoryIterator;
 
-    /**
-     * @return Generator<PathInterface>
-     */
+    /** @return Generator<SplFileInfo> */
     public function recursiveIterator(string $directory): Generator;
 
     public function recursiveIteratorIterator(

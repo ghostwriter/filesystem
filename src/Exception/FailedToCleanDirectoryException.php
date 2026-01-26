@@ -7,6 +7,4 @@ namespace Ghostwriter\Filesystem\Exception;
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 use RuntimeException;
 
-final class FailedToCleanDirectoryException extends RuntimeException implements FilesystemExceptionInterface
-{
-}
+final class FailedToCleanDirectoryException extends RuntimeException implements FilesystemExceptionInterface {}

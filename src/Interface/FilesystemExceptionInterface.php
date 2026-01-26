@@ -6,6 +6,4 @@ namespace Ghostwriter\Filesystem\Interface;
 
 use Throwable;
 
-interface FilesystemExceptionInterface extends Throwable
-{
-}
+interface FilesystemExceptionInterface extends Throwable {}
