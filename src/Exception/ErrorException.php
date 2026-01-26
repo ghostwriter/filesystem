@@ -6,6 +6,4 @@ namespace Ghostwriter\Filesystem\Exception;
 
 use Ghostwriter\Filesystem\Interface\FilesystemExceptionInterface;
 
-final class ErrorException extends \ErrorException implements FilesystemExceptionInterface
-{
-}
+final class ErrorException extends \ErrorException implements FilesystemExceptionInterface {}
