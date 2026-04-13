@@ -76,7 +76,7 @@
     "extra": {
         "ghostwriter": {
             "container": {
-                "definition": "Ghostwriter\\Filesystem\\Container\\FilesystemDefinition"
+                "provider": ["Ghostwriter\\Filesystem\\Container\\FilesystemProvider"]
             }
         },
         "thanks": {
