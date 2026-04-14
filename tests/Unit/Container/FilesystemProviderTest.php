@@ -6,7 +6,8 @@ namespace Tests\Unit\Container;
 
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\BuilderInterface;
-use Ghostwriter\Container\Interface\ContainerInterface;
+use Ghostwriter\Container\Interface\Service\ProviderInterface;
+use Ghostwriter\Container\Service\Provider\AbstractProvider;
 use Ghostwriter\Filesystem\Container\FilesystemProvider;
 use Ghostwriter\Filesystem\Filesystem;
 use Ghostwriter\Filesystem\Interface\FilesystemInterface;
@@ -20,6 +21,11 @@ use Tests\Unit\AbstractTestCase;
 #[UsesClassesThatImplementInterface(FilesystemInterface::class)]
 final class FilesystemProviderTest extends AbstractTestCase
 {
+    public function testExtendsAbstractProvider(): void
+    {
+        self::assertInstanceOf(AbstractProvider::class, new FilesystemProvider());
+    }
+
     public function testFilesystemCanBeInstantiatedFromContainer(): void
     {
         $container = Container::getInstance();
@@ -45,8 +51,8 @@ final class FilesystemProviderTest extends AbstractTestCase
         $filesystemProvider->register($container);
     }
 
-    public function testImplementationOfProviderInterface(): void
+    public function testImplementsProviderInterface(): void
     {
-        self::assertInstanceOf(FilesystemProvider::class, new FilesystemProvider());
+        self::assertInstanceOf(ProviderInterface::class, new FilesystemProvider());
     }
 }
