@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35af37fd4be0d3c3421ff39f5a8d29ac",
+    "content-hash": "1d32de53eac8cb6533e1da2c06198e16",
     "packages": [],
     "packages-dev": [
         {
             "name": "boundwize/structarmed",
-            "version": "0.5.0",
+            "version": "0.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/boundwize/structarmed.git",
-                "reference": "cd626ff2604e98e045427b7d1a6493632a351156"
+                "reference": "9cae458f50d3633a33f59c1382bcc8cbee17639d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/boundwize/structarmed/zipball/cd626ff2604e98e045427b7d1a6493632a351156",
-                "reference": "cd626ff2604e98e045427b7d1a6493632a351156",
+                "url": "https://api.github.com/repos/boundwize/structarmed/zipball/9cae458f50d3633a33f59c1382bcc8cbee17639d",
+                "reference": "9cae458f50d3633a33f59c1382bcc8cbee17639d",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
             ],
             "support": {
                 "issues": "https://github.com/boundwize/structarmed/issues",
-                "source": "https://github.com/boundwize/structarmed/tree/0.5.0"
+                "source": "https://github.com/boundwize/structarmed/tree/0.5.1"
             },
             "funding": [
                 {
@@ -74,7 +74,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-13T01:30:23+00:00"
+            "time": "2026-05-13T16:56:25+00:00"
         },
         {
             "name": "ghostwriter/coding-standard",
@@ -82,12 +82,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "0a5bee924aa1414cb71091b79b241dcb42667c0e"
+                "reference": "9109490996ef84a94bc6882b8aebb553d2e98065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/0a5bee924aa1414cb71091b79b241dcb42667c0e",
-                "reference": "0a5bee924aa1414cb71091b79b241dcb42667c0e",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/9109490996ef84a94bc6882b8aebb553d2e98065",
+                "reference": "9109490996ef84a94bc6882b8aebb553d2e98065",
                 "shasum": ""
             },
             "require": {
@@ -202,7 +202,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-13T06:18:35+00:00"
+            "time": "2026-05-13T12:28:54+00:00"
         },
         {
             "name": "ghostwriter/container",
