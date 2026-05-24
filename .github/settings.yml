@@ -23,10 +23,6 @@
 "repository":
   "name": "filesystem"
   "description": "Filesystem implementation for PHP"
-  "topics":
-    - "ghostwriter"
-    - "filesystem"
-    - "php"
   "homepage": "https://github.com/ghostwriter/filesystem"
   "default_branch": "0.2.x"
   "allow_auto_merge": true
