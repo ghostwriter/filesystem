@@ -56,6 +56,7 @@ interface FilesystemInterface
         int $flags = FilesystemIterator::SKIP_DOTS,
     ): FilesystemIterator;
 
+    /** @return list<non-empty-string> */
     public function glob(string $pattern, int $flags = 0): array;
 
     public function isDirectory(string $path): bool;

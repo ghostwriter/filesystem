@@ -4,34 +4,39 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Container;
 
-use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\BuilderInterface;
 use Ghostwriter\Container\Interface\Service\ProviderInterface;
 use Ghostwriter\Container\Service\Provider\AbstractProvider;
 use Ghostwriter\Filesystem\Container\FilesystemProvider;
 use Ghostwriter\Filesystem\Filesystem;
 use Ghostwriter\Filesystem\Interface\FilesystemInterface;
+use Ghostwriter\PHPUnitAssertions\Trait\AssertionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesClassesThatImplementInterface;
 use Tests\Unit\AbstractTestCase;
+use Throwable;
 
 #[CoversClass(FilesystemProvider::class)]
 #[UsesClass(Filesystem::class)]
 #[UsesClassesThatImplementInterface(FilesystemInterface::class)]
 final class FilesystemProviderTest extends AbstractTestCase
 {
-    public function testExtendsAbstractProvider(): void
+    use AssertionsTrait;
+
+    /** @throws Throwable */
+    public function testFilesystemProviderExtendsGhostwriterContainerServiceProviderAbstractProvider(): void
     {
-        self::assertInstanceOf(AbstractProvider::class, new FilesystemProvider());
+        self::assertClassExtendsClass(FilesystemProvider::class, AbstractProvider::class);
     }
 
-    public function testFilesystemCanBeInstantiatedFromContainer(): void
+    /** @throws Throwable */
+    public function testFilesystemProviderImplementsGhostwriterContainerInterfaceServiceProviderInterface(): void
     {
-        $container = Container::getInstance();
-        self::assertInstanceOf(Filesystem::class, $container->get(FilesystemInterface::class));
+        self::assertClassImplementsInterface(FilesystemProvider::class, ProviderInterface::class);
     }
 
+    /** @throws Throwable */
     public function testFilesystemProviderRegister(): void
     {
         $filesystemProvider = new FilesystemProvider();
@@ -49,10 +54,5 @@ final class FilesystemProviderTest extends AbstractTestCase
         $container->expects(self::never())->method('unset')->seal();
 
         $filesystemProvider->register($container);
-    }
-
-    public function testImplementsProviderInterface(): void
-    {
-        self::assertInstanceOf(ProviderInterface::class, new FilesystemProvider());
     }
 }

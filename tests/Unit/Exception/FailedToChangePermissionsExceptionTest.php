@@ -28,8 +28,6 @@ final class FailedToChangePermissionsExceptionTest extends AbstractTestCase
     /** @throws Throwable */
     public static function provideChmodCases(): iterable
     {
-        yield from [
-            'non-existent-file.txt' => ['non-existent-file.txt'],
-        ];
+        yield 'non-existent-file.txt' => ['non-existent-file.txt'];
     }
 }

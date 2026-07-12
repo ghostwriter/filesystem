@@ -777,15 +777,13 @@ final class Filesystem implements FilesystemInterface
     public function touch(string $path): void
     {
         $this->safely(static function (FilesystemInterface $filesystem) use ($path): void {
-            if ($filesystem->exists($path)) {
-                if ($filesystem->isFile($path)) {
-                    throw new FileAlreadyExistsException($path);
-                }
-
-                throw new ShouldNotHappenException('Path already exists and is not a file: ' . $path);
-            }
-
-            $parentDirectory = $filesystem->parentDirectory($path);
+            $parentDirectory = match (true) {
+                $filesystem->exists($path) => match (true) {
+                    $filesystem->isFile($path) => throw new FileAlreadyExistsException($path),
+                    default => throw new ShouldNotHappenException('Path already exists and is not a file: ' . $path),
+                },
+                default => $filesystem->parentDirectory($path),
+            };
 
             if (! $filesystem->isDirectory($parentDirectory)) {
                 $filesystem->createDirectory($parentDirectory);
@@ -839,13 +837,15 @@ final class Filesystem implements FilesystemInterface
              * Recursively search in subdirectories.
              */
             $this->glob($pattern . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR),
-            fn (array $carry, string $subDirectory): array
             /**
              * Merge the results from subdirectories.
              *
-             * @var non-empty-string $subDirectory
+             * @param list<non-empty-string> $carry
+             * @param non-empty-string       $subDirectory
+             *
+             * @return list<non-empty-string>
              */
-            => array_merge($carry, $this->findPhpFilesUsingGlob($subDirectory)),
+            fn (array $carry, string $subDirectory): array => array_merge($carry, $this->findPhpFilesUsingGlob($subDirectory)),
             /**
              * Search for php files in the current directory.
              */

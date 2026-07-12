@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use Ghostwriter\Container\Container;
 use Ghostwriter\Filesystem\Filesystem;
+use Ghostwriter\Filesystem\Interface\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use SplFileInfo;
 use Throwable;
@@ -329,6 +331,12 @@ final class FilesystemTest extends AbstractTestCase
         $path = self::$temporaryDirectory . 'file.txt';
 
         self::assertSame('file', $filesystem->filename($path));
+    }
+
+    /** @throws Throwable */
+    public function testFilesystemCanBeInstantiatedFromContainer(): void
+    {
+        self::assertInstanceOf(Filesystem::class, Container::getInstance()->get(FilesystemInterface::class));
     }
 
     /** @throws Throwable */
