@@ -44,7 +44,6 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "boundwize/structarmed": "^0.14.15",
         "ghostwriter/coding-standard": "dev-main",
         "ghostwriter/container": "^7.0.2",
         "ghostwriter/phpunit-assertions": "^0.1.0",
